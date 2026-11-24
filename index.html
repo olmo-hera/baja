@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
 <meta charset="utf-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-T8OZCve59GN7Q7ct2I9YARi2X/O9cBGdoW6wtscAqGA=' https://cdnjs.cloudflare.com; style-src 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src https://static.wixstatic.com data:; connect-src https://www.herazenter.com 'self'; manifest-src 'self'; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-IwPxZsk0oLwPzAj058cYDPDCdGYhNi5FzZ+JtffiWqQ=' https://cdnjs.cloudflare.com; style-src 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src https://static.wixstatic.com data:; connect-src https://www.herazenter.com 'self'; manifest-src 'self'; base-uri 'none'; form-action 'none'">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="robots" content="noindex, nofollow">
 <meta name="referrer" content="no-referrer">
@@ -58,6 +58,28 @@ textarea.campo{min-height:88px;resize:vertical}
 .op b{display:block;font-family:Poppins;font-weight:600;font-size:17px;color:var(--carbon)}
 .op span{display:block;font-size:15px;color:var(--gris);margin-top:2px}
 .op:active,.op[aria-pressed="true"]{border-color:var(--terracota);background:var(--terracota-suave)}
+.op-lista{display:flex;flex-direction:column;gap:12px}
+/* Opciones para quedarse (Olmo 23-nov): vivas y de color; el «no» del mismo tamaño pero discreto (sin esconderlo). */
+.oferta{position:relative;display:flex;align-items:center;gap:14px;width:100%;text-align:left;border:0;border-radius:18px;padding:18px 16px;min-height:84px;color:#fff;overflow:hidden;
+  background:linear-gradient(135deg,var(--c1),var(--c2));box-shadow:0 8px 22px -10px var(--c2),0 2px 6px rgba(0,0,0,.08);
+  animation:ofEntra .55s cubic-bezier(.2,.8,.2,1) both;animation-delay:calc(var(--i,0) * 110ms);transition:transform .15s ease}
+.oferta:active{transform:scale(.98)}
+.oferta::after{content:"";position:absolute;inset:0;background:linear-gradient(105deg,transparent 35%,rgba(255,255,255,.28) 50%,transparent 65%);transform:translateX(-120%);
+  animation:ofBrillo 3.6s ease-in-out infinite;animation-delay:calc(.9s + var(--i,0) * .5s)}
+.oferta .of-ico{flex:none;display:grid;place-items:center;width:48px;height:48px;border-radius:50%;background:rgba(255,255,255,.2);animation:ofLatido 2.4s ease-in-out infinite;animation-delay:calc(var(--i,0) * .3s)}
+.oferta .of-ico svg{width:26px;height:26px;stroke:#fff;fill:none;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
+.oferta b{display:block;font-family:Poppins;font-weight:600;font-size:18px;line-height:1.25;color:#fff}
+.oferta span{display:block;font-size:15px;line-height:1.35;color:rgba(255,255,255,.92);margin-top:3px}
+.oferta .of-flecha{flex:none;margin-left:auto;font-size:22px;opacity:.9;animation:ofFlecha 1.8s ease-in-out infinite}
+.oferta.pausa{--c1:#8FA3AB;--c2:#4F5E65}.oferta.plan_chico{--c1:#6E9A78;--c2:#2E5A3A}.oferta.horario{--c1:#C2662A;--c2:#7A3410}
+.op.salir{background:transparent;border:1.5px solid rgba(66,73,73,.18);box-shadow:none;margin-top:6px;animation:ofEntra .55s ease both;animation-delay:.5s}
+.op.salir b{font-family:Jost;font-weight:500;font-size:16px;color:var(--gris)}
+.op.salir span{font-size:14px;color:#8A8A8A}
+@keyframes ofEntra{from{opacity:0;transform:translateY(14px) scale(.97)}to{opacity:1;transform:none}}
+@keyframes ofBrillo{0%,60%{transform:translateX(-120%)}85%,100%{transform:translateX(120%)}}
+@keyframes ofLatido{0%,100%{transform:scale(1)}50%{transform:scale(1.08)}}
+@keyframes ofFlecha{0%,100%{transform:translateX(0)}50%{transform:translateX(4px)}}
+@media (prefers-reduced-motion:reduce){.oferta,.oferta::after,.oferta .of-ico,.oferta .of-flecha,.op.salir{animation:none!important}}
 .error{color:var(--alerta);font-size:16px;min-height:20px}
 .preg{display:flex;flex-direction:column;gap:10px;padding-top:6px}
 .preg h3{font-size:17px}
@@ -608,11 +630,14 @@ function opciones() {
   if (o.pausable && o.pausa) ops.push(['pausa', o.pausa.min === o.pausa.max ? `Pausar ${o.pausa.texto}` : `Pausar hasta ${o.pausa.texto}`, 'Para imprevistos. No se te cobra mientras está en pausa y regresas con tus mismas condiciones.']);
   if (o.planChico) ops.push(['plan_chico', 'Un plan más chico', `${o.planChico.nombre}: $${Number(o.planChico.precio).toLocaleString('es-MX')} por periodo, en lugar de tu plan actual.`]);
   ops.push(['horario', 'Otro horario o disciplina', 'Mira los elementos, sus horarios de la semana y compara precios de membresía.']);
+  const ICO_OF = { pausa: '<rect x="6" y="5" width="4" height="14" rx="1.2"/><rect x="14" y="5" width="4" height="14" rx="1.2"/>',
+    plan_chico: '<path d="M4 16.5 9.5 11l3.5 3.5L20 7.5"/><path d="M15 7.5h5v5"/>',
+    horario: '<rect x="3.5" y="5" width="17" height="15" rx="2.5"/><path d="M3.5 10h17M8 3v4M16 3v4"/>' };
   pinta(`<h1>Antes de irte, ¿te sirve alguna de estas?</h1>
-    ${ops.map(([k, t, d]) => `<button class="op" data-k="${k}"><b>${esc(t)}</b><span>${esc(d)}</span></button>`).join('')}
+    <div class="op-lista">${ops.map(([k, t, d], i) => `<button class="oferta ${k}" data-k="${k}" style="--i:${i}"><i class="of-ico" aria-hidden="true"><svg viewBox="0 0 24 24">${ICO_OF[k]}</svg></i><div><b>${esc(t)}</b><span>${esc(d)}</span></div><i class="of-flecha" aria-hidden="true">›</i></button>`).join('')}</div>
     ${avisoHc(true)}
-    <button class="op" id="no"><b>No, gracias, quiero cancelar</b><span>Antes te hacemos 7 preguntas rápidas.</span></button>`, () => {
-    $app.querySelectorAll('.op[data-k]').forEach(b => b.addEventListener('click', () => (b.dataset.k === 'pausa' ? pausa() : b.dataset.k === 'horario' ? horario() : quedarse(b.dataset.k))));
+    <button class="op salir" id="no"><b>No, gracias, quiero cancelar</b><span>Antes te hacemos 7 preguntas rápidas.</span></button>`, () => {
+    $app.querySelectorAll('.oferta[data-k]').forEach(b => b.addEventListener('click', () => (b.dataset.k === 'pausa' ? pausa() : b.dataset.k === 'horario' ? horario() : quedarse(b.dataset.k))));
     on('no', encuesta);
   });
 }
