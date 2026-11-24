@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
 <meta charset="utf-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-39taMqy18xmieAzmh3LA+b8NSwqhlIpAFSsDpwKzQlc=' https://cdnjs.cloudflare.com; style-src 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src https://static.wixstatic.com data:; connect-src https://www.herazenter.com 'self'; manifest-src 'self'; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-OkvztAk4HedY6AeKgeULicPQivf3QYTLpth7den2PCc=' https://cdnjs.cloudflare.com; style-src 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src https://static.wixstatic.com data:; connect-src https://www.herazenter.com 'self'; manifest-src 'self'; base-uri 'none'; form-action 'none'">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="robots" content="noindex, nofollow">
 <meta name="referrer" content="no-referrer">
@@ -69,6 +69,55 @@ textarea.campo{min-height:88px;resize:vertical}
 .folio{font-family:Poppins;font-weight:600;font-size:32px;color:var(--terracota);letter-spacing:.04em;text-align:center}
 .priv{font-size:13px;color:var(--gris);line-height:1.4}
 .par{display:flex;flex-direction:column;gap:10px}
+/* Recap (Olmo 23-nov): historias a pantalla completa, tipo «Wrapped» */
+.cargando{display:flex;flex-direction:column;align-items:center;gap:14px;padding:64px 0;text-align:center}
+.cargando i{width:44px;height:44px;border-radius:50%;border:3px solid var(--crema);border-top-color:var(--terracota);animation:gira 1s linear infinite}
+@keyframes gira{to{transform:rotate(360deg)}}
+.rc{position:fixed;inset:0;z-index:10;display:flex;flex-direction:column;color:#fff;overflow:hidden;user-select:none;-webkit-user-select:none;touch-action:pan-y;
+  padding:calc(env(safe-area-inset-top) + 12px) calc(env(safe-area-inset-right) + 16px) calc(env(safe-area-inset-bottom) + 20px) calc(env(safe-area-inset-left) + 16px);transition:background .5s ease}
+.rc.t0{background:linear-gradient(160deg,#9A4215 0%,#6E2F10 100%)}
+.rc.t1{background:linear-gradient(160deg,#424949 0%,#2B3030 100%)}
+.rc.t2{background:linear-gradient(160deg,#788991 0%,#4F5E65 100%)}
+.rc.t3{background:linear-gradient(160deg,#B5651D 0%,#9A4215 100%)}
+.rc.t4{background:linear-gradient(160deg,#4F7A5A 0%,#2E5A3A 100%)}
+.rc.t5{background:linear-gradient(160deg,#EFE7DE 0%,#E8DCD0 100%);color:var(--texto)}
+.rc-barras{display:flex;gap:4px;max-width:560px;width:100%;margin:0 auto}
+.rc-barras span{flex:1;height:3px;border-radius:3px;background:rgba(255,255,255,.35);overflow:hidden}
+.rc.t5 .rc-barras span{background:rgba(66,73,73,.2)}
+.rc-barras b{display:block;height:100%;width:0;background:currentColor}
+.rc-barras b.lleno{width:100%}
+.rc-barras b.corre{animation:llena var(--dur,7s) linear forwards}
+.rc.quieto .rc-barras b.corre{animation-play-state:paused}
+@keyframes llena{from{width:0}to{width:100%}}
+.rc-top{display:flex;justify-content:space-between;align-items:center;max-width:560px;width:100%;margin:10px auto 0;font-size:15px;opacity:.9}
+.rc-top button{padding:10px 4px 10px 16px;font-size:16px;font-weight:500;min-height:44px}
+.rc-cuerpo{flex:1;display:flex;flex-direction:column;justify-content:center;gap:14px;max-width:560px;width:100%;margin:0 auto;padding:8px 4px}
+.rc-cuerpo>*{animation:sube .6s cubic-bezier(.2,.8,.2,1) both}
+.rc-cuerpo>*:nth-child(2){animation-delay:.12s}.rc-cuerpo>*:nth-child(3){animation-delay:.24s}.rc-cuerpo>*:nth-child(4){animation-delay:.36s}.rc-cuerpo>*:nth-child(5){animation-delay:.48s}
+@keyframes sube{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
+.rc-cuerpo .ante{font-family:Jost;font-size:18px;letter-spacing:.02em;opacity:.85}
+.rc-cuerpo h2{font-family:Poppins;font-weight:600;font-size:34px;line-height:1.12;color:inherit;letter-spacing:-.02em}
+.rc-cuerpo .grande{font-family:Poppins;font-weight:600;font-size:88px;line-height:1;letter-spacing:-.04em}
+.rc-cuerpo p{font-size:19px;line-height:1.45;color:inherit;opacity:.92}
+.rc-lista{display:flex;flex-direction:column;gap:10px;margin-top:4px}
+.rc-lista div{display:flex;align-items:center;gap:12px;font-size:18px}
+.rc-lista em{font-style:normal;font-family:Poppins;font-weight:600;font-size:22px;min-width:28px}
+.rc-lista i{flex:1;height:10px;border-radius:10px;background:rgba(255,255,255,.22);overflow:hidden}
+.rc-lista i s{display:block;height:100%;background:#fff;border-radius:10px;transform-origin:left;animation:barra .9s .3s cubic-bezier(.2,.8,.2,1) both}
+@keyframes barra{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+.rc-estrellas{display:flex;flex-wrap:wrap;gap:8px;font-size:30px}
+.rc-ins{display:flex;flex-wrap:wrap;gap:10px}
+.rc-ins span{background:rgba(255,255,255,.16);border-radius:999px;padding:10px 16px;font-size:17px}
+.rc-nota{background:rgba(255,255,255,.14);border-radius:14px;padding:14px 16px;font-size:17px;line-height:1.45}
+.rc.t5 .rc-nota{background:#fff;color:var(--texto)}
+.rc-fin{display:flex;flex-direction:column;gap:10px;max-width:560px;width:100%;margin:0 auto}
+.rc-fin .btn.sec{background:transparent;border-color:rgba(66,73,73,.3)}
+.rc-toque{position:absolute;top:90px;bottom:120px;width:40%;z-index:0}
+.rc-toque.izq{left:0}.rc-toque.der{right:0;width:60%}
+.rc-cuerpo,.rc-top,.rc-fin{position:relative;z-index:1}
+.rc-cuerpo{pointer-events:none}
+.rc-cuerpo a{pointer-events:auto}
+@media (prefers-reduced-motion:reduce){.rc{transition:none}.rc-barras b.corre{animation:none;width:100%}}
 </style>
 </head>
 <body>
@@ -90,13 +139,13 @@ const MOTIVOS = [['precio', 'Precio'], ['horarios', 'Los horarios no me quedan']
 const QUEDARSE = [['horario', 'Otro horario'], ['plan_barato', 'Un plan más barato o con menos clases'], ['pausa', 'Poder pausar'], ['lugares', 'Más lugares'], ['disciplina', 'Otra disciplina o coach'], ['nada', 'Nada, es por mí'], ['otro', 'Otro']];
 const ERRORES = { verificacion: 'El correo o los 4 dígitos no coinciden con un plan. Revisa que sea el correo con el que compraste; si no tienes celular registrado, escríbele a recepción por WhatsApp.', agotado: 'Ya hubo varios intentos hoy. Escríbele a recepción por WhatsApp y te ayudamos.',
   espera: 'Espera unos segundos y vuelve a intentar.', demasiadas: 'Demasiados intentos. Espera unos minutos.', ocupado: 'Estamos con mucha demanda. Intenta en unos minutos.',
-  pase: 'Pasaron más de 30 minutos. Vuelve a empezar, por favor.', 'pausa-reciente': 'Ya pausaste tu plan en los últimos 12 meses, así que esta vez no se puede pausar.',
-  'en-proceso': 'Ya estamos procesando esto. Espera un momento.', 'ya-cancelada': 'Este plan ya tiene su cancelación en proceso.', regreso: 'Elige una fecha de regreso de 1 semana a 2 meses.',
+  pase: 'Pasaron más de 30 minutos. Vuelve a empezar, por favor.', 'pausa-reciente': 'Ya usaste la pausa que trae tu plan, así que esta vez no se puede pausar.',
+  'en-proceso': 'Ya estamos procesando esto. Espera un momento.', 'ya-cancelada': 'Este plan ya tiene su cancelación en proceso.', regreso: 'Esa fecha de regreso no entra en la pausa de tu plan.',
   orden: 'Ese plan ya no está activo. Vuelve a empezar, por favor.', 'no-cancelable': 'Este plan no se puede cancelar desde aquí. Escríbele a recepción por WhatsApp.',
   'sin-plan-chico': 'Ya no hay un plan más chico disponible. Escríbele a recepción por WhatsApp.', 'no-activa': 'Tu plan no está activo, así que no se puede pausar.',
   'no-recurrente': 'Este plan no se renueva solo, así que no hace falta pausarlo.', 'ya-cancelada-pausa': 'Este plan ya tiene su cancelación en proceso.',
   opcion: 'Elige una opción.', encuesta: 'Falta contestar algunas preguntas.', wix: 'No pudimos conectar. Intenta de nuevo en un momento.', red: 'Sin conexión. Revisa tu internet e intenta de nuevo.' };
-const S = { pase: null, nombre: '', ordenes: [], o: null, encuesta: { motivosExtra: [] }, vioOpciones: false };
+const S = { pase: null, nombre: '', ordenes: [], o: null, encuesta: { motivosExtra: [] }, vioOpciones: false, hc: null };
 
 async function api(accion, datos) {
   let r;
@@ -125,10 +174,98 @@ function inicio(error = '') {
       if (ult4.length !== 4) return void (document.getElementById('err').textContent = 'Escribe los 4 últimos dígitos de tu celular.');
       const b = await api('bajaEntrar', { email, ult4 });
       if (!b.ok) return void (document.getElementById('err').textContent = msj(b));
-      Object.assign(S, { pase: b.pase, nombre: b.nombre || '', ordenes: b.ordenes || [] });
-      elegir();
+      Object.assign(S, { pase: b.pase, nombre: b.nombre || '', ordenes: b.ordenes || [], hc: b.heraConmigo && b.heraConmigo.texto ? b.heraConmigo : null });
+      recap();
     }));
   });
+}
+
+// ---------------------------------------------------------------- 1b. recap (Olmo 23-nov: «tipo Spotify Wrapped, nostálgico»)
+// Nunca bloquea: si tarda más de 13 s o no hay historial, se sigue directo a su plan. «Saltar» siempre visible.
+const QUIETO = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const MES_LARGO = ym => { const [y, m] = String(ym).split('-'); return `${MESES[+m - 1]} de ${y}`; };
+const ELEMENTO = { AGUA: '💧 Agua', FUEGO: '🔥 Fuego', TIERRA: '🌿 Tierra', AIRE: '🌬️ Aire' };
+const n1 = (n, uno, varios) => `${n} ${n === 1 ? uno : varios}`;
+// «Ana L., Sofía M. y Caro R.» (+ «y N más» si hay más frecuentes que nombres).
+const listaNombres = (ns, total) => { const mas = total - ns.length; const xs = mas > 0 ? [...ns, `${mas} más`] : ns; return xs.length > 1 ? `${xs.slice(0, -1).join(', ')} y ${xs[xs.length - 1]}` : xs[0]; };
+// Hera Conmigo (Olmo 23-nov): solo un AVISO, nunca detiene la baja. El backend decide si sale y con qué texto.
+const avisoHc = (claro = false) => (S.hc ? `<div class="${claro ? 'aviso' : 'rc-nota'}">🏠 ${esc(S.hc.texto)}${S.hc.url ? ` <a href="${esc(S.hc.url)}" target="_blank" rel="noopener" style="color:inherit;font-weight:600">Conócelo</a>` : ''}</div>` : '');
+async function recap() {
+  pinta(`<div class="cargando"><i></i><h2>Hola, ${esc(S.nombre)}</h2><p>Estamos juntando tu historia en Hera…</p></div>`);
+  const b = await Promise.race([api('bajaRecap', { pase: S.pase }), new Promise(r => setTimeout(() => r({}), 13000))]);
+  const tarjetas = b && b.ok && b.recap ? tarjetasRecap(b.recap) : [];
+  if (tarjetas.length < 3) return elegir();
+  historias(tarjetas);
+}
+function tarjetasRecap(R) {
+  const T = [];
+  const hace = R.primera.meses >= 24 ? `Hace ${Math.floor(R.primera.meses / 12)} años` : R.primera.meses >= 2 ? `Hace ${R.primera.meses} meses` : R.primera.meses === 1 ? 'Hace un mes' : 'Hace muy poquito';
+  T.push({ t: 0, h: `<div class="ante">Tu historia en Hera</div><h2>${esc(S.nombre)}, antes de decidir, mira todo lo que has hecho.</h2>` });
+  T.push({ t: 1, h: `<div class="ante">${esc(hace)}…</div><h2>Todo empezó el ${esc(fecha(R.primera.fecha))}</h2><p>Tu primera clase fue de ${esc(R.primera.titulo)}. ¿Te acuerdas cómo te sentiste al salir?</p>` });
+  T.push({ t: 3, h: `<div class="ante">Desde entonces llevas</div><div class="grande">${R.total}</div><h2>${R.total === 1 ? 'clase' : 'clases'}</h2>${R.horas ? `<p>Eso es ${n1(R.horas, 'hora', 'horas')} solo para ti, respirando, sudando y haciéndote más fuerte.</p>` : ''}` });
+  if (R.disciplinas && R.disciplinas.length) {
+    const max = R.disciplinas[0].n;
+    T.push({ t: 2, h: `<div class="ante">Tu lugar favorito</div><h2>${esc(R.disciplinas[0].d)}</h2>
+      <div class="rc-lista">${R.disciplinas.map(d => `<div><span style="min-width:96px">${esc(d.d)}</span><i><s style="width:${Math.max(8, Math.round(d.n / max * 100))}%"></s></i><em>${d.n}</em></div>`).join('')}</div>
+      ${R.nDisciplinas > 1 ? `<p>Probaste ${R.nDisciplinas} disciplinas distintas.</p>` : ''}` });
+  }
+  if (R.coach) T.push({ t: 4, h: `<div class="ante">La voz que más escuchaste</div><h2>${esc(R.coach.nombre)}</h2><p>Compartieron ${R.coach.veces} clases. Te ha visto crecer clase con clase.</p>` });
+  if (R.horario) T.push({ t: 1, h: `<div class="ante">Tu momento de la semana</div><h2>Los ${esc(R.horario.dia)} a las ${esc(R.horario.hora)}</h2><p>Ahí estuviste ${R.horario.veces} veces. Ese ratito ya era tuyo.</p>` });
+  if (R.mejorMes) T.push({ t: 3, h: `<div class="ante">Tu mejor mes</div><h2>${esc(MES_LARGO(R.mejorMes.mes))}</h2><div class="grande">${R.mejorMes.n}</div><p>clases en un solo mes. ¡Qué mes!</p>` });
+  if (R.racha && R.racha.mejor >= 2) T.push({ t: 4, h: `<div class="ante">Tu mejor racha</div><div class="grande">${R.racha.mejor}</div><h2>semanas seguidas</h2>${R.racha.actual >= 2 ? `<p>Y ahorita llevas ${R.racha.actual} semanas sin fallar.</p>` : '<p>La constancia también se extraña.</p>'}` });
+  if (R.estrellas && (R.estrellas.ganadas.length || R.estrellas.siguiente)) {
+    const g = R.estrellas.ganadas;
+    T.push({ t: 0, h: `<div class="ante">Tus estrellas</div>${g.length ? `<div class="rc-estrellas">${g.map(() => '⭐').join('')}</div><h2>${g.length === 1 ? 'Ya ganaste la estrella de' : 'Ya ganaste las de'} ${g.length > 1 ? g.slice(0, -1).join(', ') + ' y ' + g[g.length - 1] : g[0]} clases</h2>` : '<h2>Tu primera estrella está cerca</h2>'}
+      ${R.estrellas.siguiente ? `<p>Te ${R.estrellas.faltan === 1 ? 'falta 1 clase' : `faltan ${R.estrellas.faltan} clases`} para la de ${R.estrellas.siguiente}.</p>` : ''}` });
+  }
+  const ins = (R.insignias || []).map(i => i.k === 'elemento' ? ELEMENTO[i.v] : i.k === 'miembro' ? '🌿 Miembro Hera' : i.k === 'estrella' ? `⭐ ${i.v} clases` : i.k === 'aniversario' ? `🎂 ${n1(i.v, 'año', 'años')} con nosotras` : null).filter(Boolean);
+  if (ins.length >= 2) T.push({ t: 2, h: `<div class="ante">Lo que te has ganado</div><h2>Tus insignias</h2><div class="rc-ins">${ins.map(x => `<span>${esc(x)}</span>`).join('')}</div>` });
+  if (R.compas) T.push({ t: 1, h: `<div class="ante">Tu comunidad (últimos 6 meses)</div><div class="grande">${R.compas.total}</div><h2>${R.compas.total === 1 ? 'compañera' : 'compañeras'} de clase</h2>${(R.compas.nombres || []).length ? `<p>${esc(listaNombres(R.compas.nombres, R.compas.frecuentes))} te ven seguido: coincidiste con ellas 4 veces o más. Ya eres parte de su rutina, y ellas de la tuya.</p>` : R.compas.frecuentes ? `<p>Con ${n1(R.compas.frecuentes, 'de ellas', 'de ellas')} coincidiste 4 veces o más. Ya eres parte de su rutina, y ellas de la tuya.</p>` : '<p>Cada una de ellas te vio llegar.</p>'}` });
+  const P = R.plan;
+  if (P && (R.perdida || P.restantes != null)) {
+    T.push({ t: 5, h: `<div class="ante">Lo que te queda</div><h2>${esc(P.nombre)}</h2>
+      ${P.restantes != null ? `<div class="grande" style="color:var(--terracota)">${P.restantes}</div><p>${P.restantes === 1 ? 'clase por usar' : 'clases por usar'}${P.hasta ? ` hasta el ${esc(fecha(P.hasta))}` : ''}${P.reservadas ? ` (${n1(P.reservadas, 'ya reservada', 'ya reservadas')})` : ''}.</p>` : ''}
+      ${R.perdida ? `<div class="rc-nota">${esc(R.perdida)}</div>` : ''}${P.descuento ? '<p>Con tu membresía también tienes 10% de descuento en talleres y eventos.</p>' : ''}` });
+  }
+  T.push({ t: 5, fin: true, h: `<div class="ante">${esc(S.nombre)},</div><h2>¿Seguimos juntas?</h2><p>Lo que construiste aquí es tuyo. Si algo no te está funcionando, cuéntanos: casi siempre hay una forma.</p>${avisoHc()}` });
+  return T;
+}
+function historias(T) {
+  let i = 0, timer = null, x0 = null;
+  const DUR = 7000;
+  document.body.insertAdjacentHTML('beforeend', `<div class="rc t0" id="rc" role="dialog" aria-label="Tu historia en Hera">
+    <div class="rc-barras">${T.map(() => '<span><b></b></span>').join('')}</div>
+    <div class="rc-top"><span>Hera Zenter</span><button id="rc-saltar">Saltar</button></div>
+    <button class="rc-toque izq" aria-label="Anterior"></button><button class="rc-toque der" aria-label="Siguiente"></button>
+    <div class="rc-cuerpo" aria-live="polite"></div><div class="rc-fin"></div></div>`);
+  const $rc = document.getElementById('rc'), $c = $rc.querySelector('.rc-cuerpo'), $f = $rc.querySelector('.rc-fin'), barras = [...$rc.querySelectorAll('.rc-barras b')];
+  const cerrar = sig => { clearTimeout(timer); document.removeEventListener('keydown', tecla); $rc.remove(); sig(); };
+  const ir = n => {
+    if (n < 0) n = 0;
+    if (n >= T.length) return;
+    i = n; clearTimeout(timer);
+    const t = T[i];
+    $rc.className = `rc t${t.t}`;
+    barras.forEach((b, k) => { b.className = k < i ? 'lleno' : ''; b.style.removeProperty('--dur'); });
+    void barras[i].offsetWidth;
+    barras[i].className = t.fin ? 'lleno' : 'corre';
+    $c.innerHTML = t.h;
+    $f.innerHTML = t.fin ? `<button class="btn pri" id="rc-quedo">Sí, me quedo 💛</button><button class="btn sec" id="rc-cambio">Ver mis opciones</button>` : '';
+    if (t.fin) {
+      document.getElementById('rc-quedo').addEventListener('click', () => cerrar(() => pinta(`<h1>¡Qué gusto, ${esc(S.nombre)}!</h1><p>Tu plan sigue igual, no tienes que hacer nada más. Nos vemos en tu próxima clase.</p>`)));
+      document.getElementById('rc-cambio').addEventListener('click', () => cerrar(elegir));
+    } else if (!QUIETO) timer = setTimeout(() => ir(i + 1), DUR);
+  };
+  const pausa = v => { $rc.classList.toggle('quieto', v); if (v) clearTimeout(timer); else if (!QUIETO && !T[i].fin) { clearTimeout(timer); timer = setTimeout(() => ir(i + 1), DUR / 2); } };
+  const tecla = e => { if (e.key === 'ArrowRight') ir(i + 1); else if (e.key === 'ArrowLeft') ir(i - 1); else if (e.key === 'Escape') cerrar(elegir); };
+  document.addEventListener('keydown', tecla);
+  document.getElementById('rc-saltar').addEventListener('click', () => cerrar(elegir));
+  $rc.querySelector('.rc-toque.izq').addEventListener('click', () => ir(i - 1));
+  $rc.querySelector('.rc-toque.der').addEventListener('click', () => ir(i + 1));
+  $rc.addEventListener('pointerdown', e => { x0 = e.clientX; if (e.target.closest('.rc-toque')) pausa(true); });
+  $rc.addEventListener('pointerup', e => { pausa(false); if (x0 != null && Math.abs(e.clientX - x0) > 60) { e.preventDefault(); ir(i + (e.clientX < x0 ? 1 : -1)); } x0 = null; });
+  $rc.addEventListener('pointercancel', () => { pausa(false); x0 = null; });
+  ir(0);
 }
 
 // ---------------------------------------------------------------- 2. su plan
@@ -167,20 +304,26 @@ function soloPaquete() {
 function opciones() {
   const o = S.o; S.vioOpciones = true;
   const ops = [];
-  if (o.pausable) ops.push(['pausa', 'Pausar hasta 2 meses', 'No se te cobra mientras está en pausa y regresas con tus mismas condiciones.']);
+  if (o.pausable && o.pausa) ops.push(['pausa', o.pausa.min === o.pausa.max ? `Pausar ${o.pausa.texto}` : `Pausar hasta ${o.pausa.texto}`, 'Para imprevistos. No se te cobra mientras está en pausa y regresas con tus mismas condiciones.']);
   if (o.planChico) ops.push(['plan_chico', 'Un plan más chico', `${o.planChico.nombre}: $${Number(o.planChico.precio).toLocaleString('es-MX')} por periodo, en lugar de tu plan actual.`]);
   ops.push(['horario', 'Otro horario o disciplina', 'Recepción te escribe hoy con opciones que te queden.']);
   pinta(`<h1>Antes de irte, ¿te sirve alguna de estas?</h1>
     ${ops.map(([k, t, d]) => `<button class="op" data-k="${k}"><b>${esc(t)}</b><span>${esc(d)}</span></button>`).join('')}
+    ${avisoHc(true)}
     <button class="op" id="no"><b>No, gracias, quiero cancelar</b><span>Antes te hacemos 7 preguntas rápidas.</span></button>`, () => {
     $app.querySelectorAll('.op[data-k]').forEach(b => b.addEventListener('click', () => (b.dataset.k === 'pausa' ? pausa() : quedarse(b.dataset.k))));
     on('no', encuesta);
   });
 }
 function pausa(error = '') {
-  const hoy = new Date(), min = ymdLocal(new Date(hoy.getTime() + 7 * 864e5)), max = ymdLocal(new Date(hoy.getTime() + 62 * 864e5));
-  pinta(`<h1>Pausar mi plan</h1><p>Elige el día en que regresas (de 1 semana a 2 meses). Ese día tu plan se reactiva solo.</p>
-    <div><label for="regreso">Regreso el</label><input id="regreso" class="campo" type="date" min="${min}" max="${max}" value="${ymdLocal(new Date(hoy.getTime() + 30 * 864e5))}"></div>
+  // BAJ12-A: el tope viene del backend según el plan (mensual 1 semana fija; trimestral 1 semana; semestral 2; anual 1 mes).
+  const P = S.o.pausa, fija = P.desde === P.hasta;
+  const cada = P.porCiclo ? 'una vez en cada periodo de tu plan' : 'una vez al año';
+  pinta(`<h1>Pausar mi plan</h1>${fija
+    ? `<p>Tu plan trae una pausa de ${esc(P.texto)} para imprevistos (${cada}). Regresas el <b>${esc(fecha(P.desde))}</b> y ese día tu plan se reactiva solo.</p>
+    <input id="regreso" type="hidden" value="${esc(P.desde)}">`
+    : `<p>Tu plan trae hasta ${esc(P.texto)} de pausa para imprevistos (${cada}). Elige el día en que regresas; ese día tu plan se reactiva solo.</p>
+    <div><label for="regreso">Regreso el</label><input id="regreso" class="campo" type="date" min="${esc(P.desde)}" max="${esc(P.hasta)}" value="${esc(P.hasta)}"></div>`}
     <div class="error" id="err">${esc(error)}</div>
     <button class="btn pri" id="ok">Pausar</button><button class="btn sec" id="volver">Volver</button>`, () => {
     on('volver', opciones);
@@ -254,6 +397,7 @@ function confirmar() {
       <div class="dato"><span>Ya no se te cobra después de esa fecha</span><span>✓</span></div>
       <div class="dato"><span>Cargo por cancelar antes de 2 ciclos</span><span>${o.cargo500 ? '$500' : 'No aplica'}</span></div></div>
     <p>Conservas tus clases hasta el ${esc(fecha(o.fin))}. Si regresas, te abonamos tus clases sin usar.</p>
+    ${['tiempo', 'mudanza'].includes(S.encuesta.motivo) ? avisoHc(true) : ''}
     <div class="error" id="err"></div>
     <div class="par"><button class="btn pri" id="ok">Confirmar cancelación</button><button class="btn sec" id="volver">Volver</button></div>`, () => {
     on('volver', encuesta);
