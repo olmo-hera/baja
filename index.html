@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
 <meta charset="utf-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-IwPxZsk0oLwPzAj058cYDPDCdGYhNi5FzZ+JtffiWqQ=' https://cdnjs.cloudflare.com; style-src 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src https://static.wixstatic.com data:; connect-src https://www.herazenter.com 'self'; manifest-src 'self'; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-4BQGLg1Tu9VizjFPXGHaaO6dudMw9jBb1X6TVozzlw8=' https://cdnjs.cloudflare.com; style-src 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src https://static.wixstatic.com data:; connect-src https://www.herazenter.com 'self'; manifest-src 'self'; base-uri 'none'; form-action 'none'">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="robots" content="noindex, nofollow">
 <meta name="referrer" content="no-referrer">
@@ -49,6 +49,7 @@ label{font-size:15px;color:var(--gris);display:block;margin-bottom:6px}
 textarea.campo{min-height:88px;resize:vertical}
 .btn{display:block;width:100%;border-radius:14px;padding:16px 18px;font-size:18px;font-weight:500;text-align:center;min-height:56px}
 .btn.pri{background:var(--terracota);color:#fff}
+a.btn{text-decoration:none}
 .btn.sec{background:#fff;color:var(--carbon);border:1.5px solid var(--crema)}
 .btn:active{filter:brightness(.94)}
 .atras{display:inline-flex;align-items:center;gap:6px;min-height:44px;padding:8px 0;margin:-10px 0 2px;font-size:16px;font-weight:500;color:var(--carbon);opacity:.8}
@@ -353,7 +354,10 @@ const ERRORES = { verificacion: 'El correo o los 4 dígitos no coinciden con un 
   orden: 'Ese plan ya no está activo. Vuelve a empezar, por favor.', 'no-cancelable': 'Este plan no se puede cancelar desde aquí. Escríbele a recepción por WhatsApp.',
   'sin-plan-chico': 'Ya no hay un plan más chico disponible. Escríbele a recepción por WhatsApp.', 'no-activa': 'Tu plan no está activo, así que no se puede pausar.',
   'no-recurrente': 'Este plan no se renueva solo, así que no hace falta pausarlo.', 'ya-cancelada-pausa': 'Este plan ya tiene su cancelación en proceso.',
-  opcion: 'Elige una opción.', encuesta: 'Falta contestar algunas preguntas.', wix: 'No pudimos conectar. Intenta de nuevo en un momento.', red: 'Sin conexión. Revisa tu internet e intenta de nuevo.' };
+  opcion: 'Elige una opción.', encuesta: 'Falta contestar algunas preguntas.', wix: 'No pudimos conectar. Intenta de nuevo en un momento.', red: 'Sin conexión. Revisa tu internet e intenta de nuevo.',
+  apagado: 'El pago en línea no está disponible ahorita. Escríbenos por WhatsApp con tu folio y lo pagas en recepción.',
+  folio: 'Este folio ya no tiene un cargo por pagar. Si tienes dudas, escríbenos por WhatsApp.', 'liga-vencida': 'La liga de pago de este folio ya venció. Escríbenos por WhatsApp con tu folio y lo pagas en recepción.',
+  revisar: 'Tu pago está en revisión. Recepción te escribe hoy por WhatsApp.', incompleto: 'Recibimos un pago menor al cargo de $500. Recepción te escribe para cobrarte la diferencia.' };
 const S = { pase: null, nombre: '', ordenes: [], o: null, encuesta: { motivosExtra: [] }, vioOpciones: false, hc: null, historias: null };
 
 async function api(accion, datos) {
@@ -602,6 +606,7 @@ function elegir() {
 const estadoTxt = o => (o.estado === 'PAUSED' ? 'En pausa' : o.yaCancelada ? 'Cancelación en proceso' : 'Activa');
 function plan() {
   const o = S.o; paso(plan);
+  if (o.folio && o.cargoPendiente) return pintaPagar(o.folio, o.fin, false);   // pidió su cancelación y falta pagar el cargo de $500
   if (o.folio || o.yaCancelada) return pinta(`<h1>${esc(o.nombre)}</h1><div class="aviso ok">${o.folio ? `Ya pediste tu cancelación. Tu folio es <b>${esc(o.folio)}</b>.` : 'Este plan ya está cancelado y no se volverá a cobrar.'} Conservas tus clases hasta el ${esc(fecha(o.fin))}.</div>
     <p>¿Dudas? Escríbele a recepción por WhatsApp.</p>`);
   pinta(`<h1>Hola, ${esc(S.nombre)}</h1>
@@ -950,9 +955,57 @@ async function enviar(orderId) {
   const b = await api('bajaConfirmar', { pase: S.pase, orderId, encuesta: S.encuesta, vioOpciones: S.vioOpciones });
   if (!b.ok) { if (b.error === 'pase') return inicio(ERRORES.pase); const e = document.getElementById('err'); if (e) e.textContent = msj(b); return; }
   if (!orderId) return pinta('<h1>¡Gracias!</h1><p>Tus respuestas nos ayudan mucho. Aquí te esperamos.</p>', null, true);
+  if (b.pagar) return pintaPagar(b.folio, b.fin || S.o.fin, true);
   pinta(`<h1>Recibimos tu cancelación</h1><div class="caja"><p style="text-align:center">Tu folio</p><div class="folio">${esc(b.folio)}</div></div>
     <p>${b.cancelada ? 'Tu plan ya quedó cancelado: no se te volverá a cobrar.' : 'Recepción la procesa hoy y te confirma por WhatsApp.'} Conservas tus clases hasta el ${esc(fecha(b.fin || S.o.fin))}.</p>
     <p>Gracias por el tiempo que entrenaste con nosotras.</p>`, null, true);
+}
+
+// ---------------------------------------------------------------- 6. cargo de $500 en línea (decisión «A», 23-nov; revisión G1)
+// Sin sesión ni cuenta: el servidor da la liga de pago de Wix de SU folio (una por folio, un solo pago) y ella paga en otra
+// pestaña. Esta pestaña se queda con su pase de 30 min para «Ya pagué»; el servidor busca el pago en Wix y, si lo ve, cancela
+// su plan al final del periodo. Si cierra todo, la ronda diaria lo ve igual.
+function pintaPagar(folio, fin, recien) {
+  paso(pintaPagar, folio, fin, recien);
+  pinta(`<h1>Último paso: paga el cargo de $500</h1>
+    <div class="caja"><p style="text-align:center">Tu folio</p><div class="folio">${esc(folio)}</div></div>
+    <p>${recien ? 'Recibimos tu cancelación. ' : ''}Como llevas menos de 2 pagos de tu membresía, cancelar tiene un cargo de <b>$500</b>. En cuanto se vea tu pago, tu plan se cancela solo al final de tu periodo (${esc(fecha(fin))}) y ya no se te vuelve a cobrar.</p>
+    <div class="error" id="err"></div>
+    <div id="liga"><button class="btn pri" disabled>Preparando tu liga de pago…</button></div>
+    <button class="btn sec" id="pague" hidden>Ya pagué</button>
+    <p class="priv">Si prefieres pagar en recepción, escríbenos por WhatsApp con tu folio.</p>`, async () => {
+    on('pague', e => ocupado(e.currentTarget, () => yaPague(folio)));
+    const b = await api('bajaCargoLiga', { pase: S.pase, folio });
+    if (!document.getElementById('liga')) return;                                   // ya cambió de pantalla
+    if (b.ok && (b.pagado || b.incompleto)) return resultadoCargo(b);
+    let u = null; try { u = new URL(String(b.url || '')); } catch (_) {}
+    if (b.ok && u && (u.protocol === 'https:' || LOCAL)) {
+      // Enlace real (no window.open tras una espera: el celular lo bloquearía). Abre la página de pago de Wix en otra pestaña.
+      document.getElementById('liga').innerHTML = `<a class="btn pri" id="pagar" href="${esc(u.href)}" target="_blank" rel="noopener noreferrer">Pagar $500 en línea</a>`;
+      document.getElementById('pague').hidden = false;
+      return;
+    }
+    document.getElementById('liga').innerHTML = '';
+    if (b.error === 'pase') return inicio(ERRORES.pase);
+    const x = document.getElementById('err'); if (x) x.textContent = msj(b);
+  }, true);
+}
+async function yaPague(folio) {
+  const b = await api('bajaCargoListo', { pase: S.pase, folio });
+  if (b.ok) return resultadoCargo(b);
+  if (b.error === 'pase') return pinta(`<h1>Gracias</h1><p>Si ya pagaste, tu cancelación se completa sola en menos de un día y recepción te confirma por WhatsApp. Tu folio es <b>${esc(folio)}</b>.</p>`, null, true);
+  const x = document.getElementById('err'); if (x) x.textContent = msj(b);
+}
+function resultadoCargo(b) {
+  if (b.cancelada || b.pagado || b.incompleto) paso(resultadoCargo, b);
+  if (b.incompleto) return pinta(`<h1>Recibimos un pago incompleto</h1><div class="caja"><p style="text-align:center">Tu folio</p><div class="folio">${esc(b.folio)}</div></div>
+    <p>Nos llegó un pago de $${esc(Number(b.monto || 0).toLocaleString('es-MX'))}, menos que el cargo de $500. Recepción te escribe por WhatsApp para cobrarte la diferencia y terminar tu cancelación.</p>`, null, true);
+  if (b.cancelada) return pinta(`<h1>¡Listo! Pagaste el cargo y tu plan quedó cancelado</h1><div class="caja"><p style="text-align:center">Tu folio</p><div class="folio">${esc(b.folio)}</div></div>
+    <div class="aviso ok">No se te volverá a cobrar. Conservas tus clases hasta el ${esc(fecha(b.fin))}.</div><p>Gracias por el tiempo que entrenaste con nosotras.</p>`, null, true);
+  if (b.pagado) return pinta(`<h1>Recibimos tu pago</h1><div class="caja"><p style="text-align:center">Tu folio</p><div class="folio">${esc(b.folio)}</div></div>
+    <p>Recepción termina tu cancelación hoy y te confirma por WhatsApp. Conservas tus clases hasta el ${esc(fecha(b.fin))}.</p>`, null, true);
+  const x = document.getElementById('err');
+  if (x) x.textContent = 'Todavía no vemos tu pago. Si ya pagaste, espera un minuto y vuelve a tocar «Ya pagué»; si no, tu cancelación se completa sola en menos de un día cuando llegue.';
 }
 
 inicio();
