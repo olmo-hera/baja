@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
 <meta charset="utf-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-Yaswj9Zinnm00BRnCaLnsHTRrPv9GWBMd2xueIA8dlo=' https://cdnjs.cloudflare.com; style-src 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src https://static.wixstatic.com data:; connect-src https://www.herazenter.com 'self'; manifest-src 'self'; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-T8OZCve59GN7Q7ct2I9YARi2X/O9cBGdoW6wtscAqGA=' https://cdnjs.cloudflare.com; style-src 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src https://static.wixstatic.com data:; connect-src https://www.herazenter.com 'self'; manifest-src 'self'; base-uri 'none'; form-action 'none'">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="robots" content="noindex, nofollow">
 <meta name="referrer" content="no-referrer">
@@ -76,13 +76,51 @@ textarea.campo{min-height:88px;resize:vertical}
 .cargando i{width:44px;height:44px;border-radius:50%;border:3px solid var(--crema);border-top-color:var(--terracota);animation:gira 1s linear infinite}
 @keyframes gira{to{transform:rotate(360deg)}}
 .rc{position:fixed;inset:0;z-index:10;display:flex;flex-direction:column;color:#fff;overflow:hidden;user-select:none;-webkit-user-select:none;touch-action:pan-y;
-  padding:calc(env(safe-area-inset-top) + 12px) calc(env(safe-area-inset-right) + 16px) calc(env(safe-area-inset-bottom) + 20px) calc(env(safe-area-inset-left) + 16px);transition:background .5s ease}
-.rc.t0{background:linear-gradient(160deg,#9A4215 0%,#6E2F10 100%)}
-.rc.t1{background:linear-gradient(160deg,#424949 0%,#2B3030 100%)}
-.rc.t2{background:linear-gradient(160deg,#788991 0%,#4F5E65 100%)}
-.rc.t3{background:linear-gradient(160deg,#B5651D 0%,#9A4215 100%)}
-.rc.t4{background:linear-gradient(160deg,#4F7A5A 0%,#2E5A3A 100%)}
-.rc.t5{background:linear-gradient(160deg,#EFE7DE 0%,#E8DCD0 100%);color:var(--texto)}
+  padding:calc(env(safe-area-inset-top) + 12px) calc(env(safe-area-inset-right) + 16px) calc(env(safe-area-inset-bottom) + 20px) calc(env(safe-area-inset-left) + 16px);
+  background:linear-gradient(160deg,var(--f1) 0%,var(--f2) 100%);transition:--f1 .7s ease,--f2 .7s ease,--b1 .9s ease,--b2 .9s ease,--b3 .9s ease,--l .7s ease}
+/* Fondos vivos (Olmo 23-nov: «más visual, que motive»): colores por tema que se funden de una tarjeta a otra (@property),
+   3 manchas suaves a la deriva, grano fino, un motivo por tema (anillos, cielo, olas) y confeti en las de festejo. */
+@property --f1{syntax:'<color>';inherits:true;initial-value:#9A4215}
+@property --f2{syntax:'<color>';inherits:true;initial-value:#5E260B}
+@property --b1{syntax:'<color>';inherits:true;initial-value:#D27A45}
+@property --b2{syntax:'<color>';inherits:true;initial-value:#E9B48C}
+@property --b3{syntax:'<color>';inherits:true;initial-value:#6E2F10}
+@property --l{syntax:'<color>';inherits:true;initial-value:rgba(255,236,214,.2)}
+.rc.t0{--f1:#A0481A;--f2:#5E260B;--b1:#D27A45;--b2:#E9B48C;--b3:#6E2F10;--l:rgba(255,236,214,.2)}
+.rc.t1{--f1:#4A5252;--f2:#232828;--b1:#9A4215;--b2:#788991;--b3:#5E6A6A;--l:rgba(255,240,225,.75)}
+.rc.t2{--f1:#7C8D95;--f2:#46545B;--b1:#B4C5CB;--b2:#E8C9B0;--b3:#3F4E55;--l:rgba(255,255,255,.16)}
+.rc.t3{--f1:#B5651D;--f2:#8A3912;--b1:#E08E45;--b2:#F2C38B;--b3:#7E3410;--l:rgba(255,236,214,.2)}
+.rc.t4{--f1:#55805F;--f2:#2B5236;--b1:#8DB294;--b2:#D6E2C2;--b3:#24452D;--l:rgba(255,255,255,.15)}
+.rc.t5{--f1:#F4EDE5;--f2:#E6D8CA;--b1:#FFFFFF;--b2:#EBC9AE;--b3:#DCC7B3;--l:rgba(154,66,21,.13);color:var(--texto)}
+.rc-fondo{position:absolute;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+.rc-fondo .bl{position:absolute;border-radius:50%;opacity:.75;will-change:transform}
+.rc-fondo .b1{width:95vmax;height:95vmax;top:-48vmax;left:-42vmax;background:radial-gradient(circle,var(--b1) 0%,transparent 62%);animation:deriva1 23s ease-in-out infinite alternate}
+.rc-fondo .b2{width:85vmax;height:85vmax;bottom:-46vmax;right:-40vmax;background:radial-gradient(circle,var(--b2) 0%,transparent 60%);opacity:.5;animation:deriva2 29s ease-in-out infinite alternate}
+.rc-fondo .b3{width:70vmax;height:70vmax;top:22%;left:30%;background:radial-gradient(circle,var(--b3) 0%,transparent 64%);opacity:.7;animation:deriva3 34s ease-in-out infinite alternate}
+.rc.t5 .rc-fondo .bl{opacity:.75}
+@keyframes deriva1{to{transform:translate(18vw,14vh) scale(1.18)}}
+@keyframes deriva2{to{transform:translate(-16vw,-18vh) scale(1.12)}}
+@keyframes deriva3{to{transform:translate(-26vw,-10vh) scale(.85)}}
+.rc-fondo::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 120% 90% at 50% 45%,transparent 45%,rgba(20,12,8,.28) 100%);z-index:1}
+.rc.t5 .rc-fondo::before{background:radial-gradient(ellipse 120% 90% at 50% 45%,transparent 55%,rgba(154,66,21,.06) 100%)}
+.rc-fondo::after{content:'';position:absolute;inset:0;z-index:3;opacity:.22;mix-blend-mode:overlay;background-size:180px 180px;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .5 0 0 0 0 .5 0 0 0 0 .5 0 0 0 .9 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)'/%3E%3C/svg%3E")}
+.rc.t5 .rc-fondo::after{opacity:.35;mix-blend-mode:multiply}
+.rc-motivo{position:absolute;inset:0;z-index:2;color:var(--l);animation:aparece 1.1s ease both}
+@keyframes aparece{from{opacity:0}}
+.rc-motivo .anillos{position:absolute;width:min(135vw,760px);aspect-ratio:1;top:-22%;right:max(-48%,calc(50% - 720px));animation:gira 140s linear infinite}
+.rc-motivo .anillos.abajo{top:auto;right:auto;bottom:-30%;left:max(-55%,calc(50% - 760px));width:min(110vw,620px);animation-direction:reverse;animation-duration:180s}
+.rc-motivo .olas{position:absolute;left:0;bottom:6%;width:200%;height:42%;animation:olea 26s linear infinite}
+.rc-motivo .olas.o2{bottom:-4%;height:36%;animation-duration:38s;opacity:.7}
+@keyframes olea{to{transform:translateX(-50%)}}
+.rc-motivo .astro{position:absolute;width:var(--s);height:var(--s);border-radius:50%;background:currentColor;box-shadow:0 0 6px currentColor;animation:titila var(--t) ease-in-out var(--d) infinite}
+.rc-motivo .astro.brilla{border-radius:0;background:currentColor;box-shadow:none;clip-path:polygon(50% 0,61% 39%,100% 50%,61% 61%,50% 100%,39% 61%,0 50%,39% 39%)}
+@keyframes titila{0%,100%{opacity:.15;transform:scale(.7)}50%{opacity:1;transform:none}}
+.rc-motivo .cf{position:absolute;bottom:-30px;left:var(--x);width:var(--s);height:var(--s);background:var(--c);border-radius:50%;opacity:0;animation:asciende var(--t) linear var(--d) infinite}
+.rc-motivo .cf.r{border-radius:2px;height:calc(var(--s) * .45)}
+.rc-motivo .cf.e{border-radius:0;width:calc(var(--s) * 1.6);height:calc(var(--s) * 1.6);clip-path:polygon(50% 0,61% 39%,100% 50%,61% 61%,50% 100%,39% 61%,0 50%,39% 39%)}
+@keyframes asciende{0%{opacity:0;transform:translate3d(0,0,0) rotate(0)}12%{opacity:.95}80%{opacity:.85}100%{opacity:0;transform:translate3d(var(--dx),-112vh,0) rotate(var(--r))}}
+.rc.quieto .rc-fondo *,.rc.quieto .rc-cuerpo *{animation-play-state:paused}
 .rc-barras{display:flex;gap:4px;max-width:560px;width:100%;margin:0 auto}
 .rc-barras span{flex:1;height:3px;border-radius:3px;background:rgba(255,255,255,.35);overflow:hidden}
 .rc.t5 .rc-barras span{background:rgba(66,73,73,.2)}
@@ -99,27 +137,171 @@ textarea.campo{min-height:88px;resize:vertical}
 @keyframes sube{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
 .rc-cuerpo .ante{font-family:Jost;font-size:18px;letter-spacing:.02em;opacity:.85}
 .rc-cuerpo h2{font-family:Poppins;font-weight:600;font-size:34px;line-height:1.12;color:inherit;letter-spacing:-.02em}
-.rc-cuerpo .grande{font-family:Poppins;font-weight:600;font-size:88px;line-height:1;letter-spacing:-.04em}
+.rc-cuerpo{text-shadow:0 1px 18px rgba(30,14,6,.18)}
+.rc.t5 .rc-cuerpo{text-shadow:none}
+.rc-cuerpo .grande{font-family:Poppins;font-weight:600;font-size:96px;line-height:1;letter-spacing:-.04em;position:relative;isolation:isolate;align-self:flex-start;padding:0 .08em;font-variant-numeric:tabular-nums}
+.rc-cuerpo .grande::before,.rc-cuerpo .grande::after{content:'';position:absolute;left:50%;top:52%;width:1.5em;height:1.5em;margin:-.75em 0 0 -.75em;border-radius:50%;border:2px solid currentColor;opacity:0;z-index:-1;animation:onda 3.6s cubic-bezier(.2,.6,.3,1) .5s infinite}
+.rc-cuerpo .grande::after{animation-delay:2.3s}
+@keyframes onda{0%{opacity:.4;transform:scale(.45)}100%{opacity:0;transform:scale(1.9)}}
+.rc-cuerpo .grande .num{display:inline-block}
+.rc-sr{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
 .rc-cuerpo p{font-size:19px;line-height:1.45;color:inherit;opacity:.92}
 .rc-lista{display:flex;flex-direction:column;gap:10px;margin-top:4px}
 .rc-lista div{display:flex;align-items:center;gap:12px;font-size:18px}
 .rc-lista em{font-style:normal;font-family:Poppins;font-weight:600;font-size:22px;min-width:28px}
 .rc-lista i{flex:1;height:10px;border-radius:10px;background:rgba(255,255,255,.22);overflow:hidden}
-.rc-lista i s{display:block;height:100%;background:#fff;border-radius:10px;transform-origin:left;animation:barra .9s .3s cubic-bezier(.2,.8,.2,1) both}
+.rc-lista i s{display:block;height:100%;background:linear-gradient(90deg,#F3E6D8,#fff);border-radius:10px;transform-origin:left;animation:barra 1s calc(.35s + var(--d,0s)) cubic-bezier(.2,.8,.2,1) both;box-shadow:0 0 12px rgba(255,255,255,.35)}
 @keyframes barra{from{transform:scaleX(0)}to{transform:scaleX(1)}}
-.rc-estrellas{display:flex;flex-wrap:wrap;gap:8px;font-size:30px}
+.rc-llevas{display:flex;align-items:baseline;flex-wrap:wrap;gap:0 12px;font-family:Poppins;font-weight:600;font-size:26px;line-height:1.1}
+.rc-llevas>span:first-child{flex-basis:100%;font-size:22px;opacity:.9;margin-bottom:-6px}
+.rc-llevas .grande{font-size:84px;align-self:auto}
+.rc-defs{position:absolute;width:0;height:0}
+.rc-est{display:flex;flex-direction:column;gap:12px;margin:4px 0}
+.rc-est-chicas{display:flex;flex-wrap:wrap;gap:6px}
+.rc-est-chicas .est{width:44px;height:44px}
+.rc-est-grandes{display:flex;align-items:flex-end;gap:10px}
+.rc-est-grandes .est{flex:0 1 112px;min-width:0;height:auto;aspect-ratio:1}
+.rc-est-grandes.n1 .est{flex-basis:180px}.rc-est-grandes.n2 .est{flex-basis:150px}
+.est{display:block;overflow:visible;font-family:Poppins;font-weight:600;animation:brota .7s cubic-bezier(.3,1.5,.5,1) calc(.45s + var(--d,0s)) both}
+.est.oro{filter:drop-shadow(0 0 10px rgba(250,210,130,.55)) drop-shadow(0 4px 10px rgba(60,20,5,.3))}
+.est.oro .lustre{animation:lustre 3.2s ease-in-out calc(1.4s + var(--d,0s)) infinite}
+.est text{fill:#6B2C0E}
+.est.sig{animation-name:brota,respira;animation-duration:.7s,3s;animation-delay:calc(.45s + var(--d,0s)),calc(1.2s + var(--d,0s));animation-iteration-count:1,infinite;animation-fill-mode:both,none;animation-timing-function:cubic-bezier(.3,1.5,.5,1),ease-in-out}
+.est.sig{filter:drop-shadow(0 0 10px rgba(255,255,255,.3))}
+.est.sig text{fill:#fff;stroke:rgba(90,35,10,.55);stroke-width:3px;paint-order:stroke}
+.est .llena{animation:llenado 1.6s cubic-bezier(.3,.7,.2,1) calc(.9s + var(--d,0s)) both}
+@keyframes brota{0%{opacity:0;transform:scale(.2) rotate(-35deg)}70%{opacity:1}100%{opacity:1;transform:none}}
+@keyframes respira{0%,100%{transform:none}50%{transform:scale(1.05)}}
+@keyframes llenado{from{transform:translateY(var(--h))}}
+@keyframes lustre{0%,55%,100%{opacity:0}75%{opacity:.75}}
 .rc-ins{display:flex;flex-wrap:wrap;gap:10px}
-.rc-ins span{background:rgba(255,255,255,.16);border-radius:999px;padding:10px 16px;font-size:17px}
+.rc-ins span{display:inline-flex;align-items:center;gap:10px;background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.22);border-radius:999px;padding:6px 18px 6px 6px;font-size:17px;
+  animation:brota .6s cubic-bezier(.3,1.4,.5,1) calc(.4s + var(--d,0s)) both;-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}
+.rc-ins svg{width:40px;height:40px;flex:none}
+.rc-hoja{align-self:flex-start;display:flex;flex-direction:column;align-items:center;width:112px;background:#FBF6F0;color:var(--carbon);border-radius:14px;overflow:hidden;text-shadow:none;
+  box-shadow:0 14px 34px rgba(0,0,0,.3);transform:rotate(-5deg);animation:hoja .9s cubic-bezier(.3,1.4,.5,1) .15s both}
+.rc-hoja small{display:block;width:100%;text-align:center;font-size:14px;letter-spacing:.12em;text-transform:uppercase;padding:6px 0 4px}
+.rc-hoja small:first-child{background:var(--terracota);color:#fff;font-weight:500}
+.rc-hoja b{font-family:Poppins;font-weight:600;font-size:52px;line-height:1;padding:6px 0 0}
+@keyframes hoja{from{opacity:0;transform:translateY(-30px) rotate(-18deg)}to{opacity:1;transform:rotate(-5deg)}}
+.rc-reloj{width:104px;height:104px;align-self:flex-start;overflow:visible}
+.rc-reloj .man{transform-origin:50px 50px;transform:rotate(var(--a));animation:manecilla 1.8s cubic-bezier(.3,1.2,.4,1) .4s both}
+@keyframes manecilla{from{transform:rotate(calc(var(--a) - 300deg))}}
+.rc-voz{display:flex;align-items:center;gap:5px;height:44px}
+.rc-voz i{display:block;width:6px;height:100%;border-radius:6px;background:rgba(255,255,255,.85);transform:scaleY(.25);animation:voz 1.1s ease-in-out var(--d) infinite alternate}
+@keyframes voz{to{transform:scaleY(var(--k))}}
+.rc-semanas{display:flex;flex-wrap:wrap;gap:7px;align-items:center}
+.rc-semanas i{width:22px;height:22px;border-radius:50%;background:#F3E6D8;box-shadow:0 0 10px rgba(255,240,220,.5);animation:brota .5s cubic-bezier(.3,1.5,.5,1) calc(.5s + var(--d)) both}
+.rc-semanas i.ya{background:#F2C38B}
+.rc-semanas em{font-style:normal;font-family:Poppins;font-weight:600;font-size:17px;margin-left:4px}
 .rc-nota{background:rgba(255,255,255,.14);border-radius:14px;padding:14px 16px;font-size:17px;line-height:1.45}
 .rc.t5 .rc-nota{background:#fff;color:var(--texto)}
 .rc-fin{display:flex;flex-direction:column;gap:10px;max-width:560px;width:100%;margin:0 auto}
 .rc-fin .btn.sec{background:transparent;border-color:rgba(66,73,73,.3)}
 .rc-toque{position:absolute;top:90px;bottom:120px;width:40%;z-index:0}
 .rc-toque.izq{left:0}.rc-toque.der{right:0;width:60%}
-.rc-cuerpo,.rc-top,.rc-fin{position:relative;z-index:1}
+.rc-barras,.rc-cuerpo,.rc-top,.rc-fin{position:relative;z-index:1}
 .rc-cuerpo{pointer-events:none}
 .rc-cuerpo a{pointer-events:auto}
 @media (prefers-reduced-motion:reduce){.rc{transition:none}.rc-barras b.corre{animation:none;width:100%}}
+/* «Otro horario o disciplina» (Olmo 23-nov): las fichas de elemento, la agenda y «¿cuántas clases?» de la tablet (alta.html). */
+:root{--fuego:#E8613C;--agua:#3C8FD6;--aire:#6F9CCB;--tierra-el:#7A6A4F;
+  --ag-vino:#8E4A55;--ag-naranja:#D98A5B;--ag-salvia:#8E9E7A;--ag-azul:#7590A3;--ag-carbon:#3E3E3E;--ag-crema:#F3EEE6;--ag-borde:#DDD2C4}
+.ico{width:22px;height:22px;flex:none}
+.hoy{display:flex;align-items:center;gap:12px;background:#fff;border:1.5px solid var(--crema);border-radius:14px;padding:12px 14px;font-size:16px;line-height:1.35;color:var(--texto)}
+.hoy small{display:block;font-size:14px;color:var(--gris)}
+.hoy b{font-weight:500;color:var(--carbon)}
+.hoy .pr{font-family:Poppins;font-weight:600;color:var(--terracota)}
+.el-lista{display:flex;flex-direction:column;gap:16px}
+.el-carta{background:#fff;border-radius:var(--radio);box-shadow:var(--sombra);border:2px solid transparent;overflow:hidden;display:flex;flex-direction:column;cursor:pointer;text-align:left}
+.el-carta:active{transform:scale(.99)}
+.el-carta:focus-visible{outline:3px solid var(--pizarra);outline-offset:2px}
+.el-carta.tuyo{border-color:var(--terracota)}
+.el-cab{position:relative;display:flex;align-items:center;gap:14px;padding:16px 18px;border-top:6px solid var(--c)}
+.el-cab::before{content:'';position:absolute;inset:0;background:var(--c);opacity:var(--o,.13)}
+.el-cab > *{position:relative}
+.el-cab svg{flex:none}
+.el-nom{flex:1;min-width:0;display:flex;flex-direction:column;align-items:flex-start;gap:4px}
+.el-nom h2{font-size:26px;line-height:1.1}
+.tu-et{display:inline-block;background:var(--terracota);color:#fff;font-size:13px;font-weight:500;letter-spacing:.02em;border-radius:999px;padding:3px 10px}
+.el-precio{text-align:right;color:var(--carbon);line-height:1.1;flex:none}
+.el-precio small{display:block;font-size:15px}
+.el-precio b{font-family:Poppins;font-weight:600;font-size:28px;color:var(--terracota)}
+.el-precio span{font-size:16px}
+.el-cuerpo{display:flex;flex-direction:column;gap:12px;padding:14px 18px 16px}
+.el-disc-tit{font-size:15px;color:var(--gris)}
+.el-disc{list-style:none;display:flex;flex-direction:column;gap:6px}
+.el-disc li{display:flex;align-items:center;gap:10px;font-size:17px;font-weight:500;color:var(--carbon)}
+.el-disc i{width:14px;height:14px;border-radius:50%;flex:none}
+.ver-ag{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;min-height:50px;border:1.5px solid var(--ag-vino);color:var(--ag-vino);background:#fff;border-radius:14px;font-size:17px;font-weight:500;padding:10px 14px}
+.ver-ag:active{background:#F6ECEE}
+.el-pie{font-size:18px;font-weight:500;color:var(--terracota)}
+.tiles{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.tiles > :last-child:nth-child(odd):not(:first-child){grid-column:1/-1}
+.tile{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;text-align:center;gap:4px;background:#fff;border-radius:var(--radio);box-shadow:var(--sombra);border:2px solid transparent;padding:40px 12px 18px;min-width:0}
+.tile:active{transform:scale(.98);background:var(--arena-suave)}
+.tiles:has(.elegida) .tile{padding-top:48px}
+.tiles:has(.mejor) .tile{padding-top:54px}
+.tile-num{font-family:Poppins;font-weight:600;font-size:52px;line-height:1;color:var(--carbon)}
+.tile-num.txt{font-size:28px;line-height:1.2}
+.tile-unidad{font-size:17px;color:var(--carbon)}
+.tile-sep{width:44px;height:2px;background:var(--crema);margin:8px 0 6px}
+.tile-ppc{font-size:17px;color:var(--carbon)}
+.tile-ppc b{font-family:Poppins;font-weight:600;font-size:24px;color:var(--terracota)}
+.tile small{font-size:15px;color:var(--gris);line-height:1.3}
+.tile .tile-otras{font-size:14px}
+.tile.elegida{border-color:var(--terracota);background:linear-gradient(180deg,var(--terracota-suave) 0,#fff 55%)}
+.tile.destacada{border-color:#D9B25E;background:#FFFBF2}
+.tile .cinta{position:absolute;top:-1px;left:50%;transform:translateX(-50%);background:var(--terracota);color:#fff;font-family:Poppins;font-weight:600;font-size:14px;letter-spacing:.02em;padding:5px 12px;border-radius:0 0 12px 12px;white-space:nowrap}
+.tile .mejor{position:absolute;top:-1px;left:50%;transform:translateX(-50%);width:max-content;max-width:calc(100% - 20px);font-size:13px;line-height:1.25;padding:4px 10px;border-radius:0 0 10px 10px;background:#F5E7C8;color:#6A4708}
+.tile-vs{display:inline-block;margin-top:8px;font-size:14px;font-weight:500;line-height:1.3;border-radius:10px;padding:4px 10px;background:var(--verde-suave);color:var(--verde-texto)}
+.tile-vs.mas{background:var(--arena-suave);color:var(--texto)}
+.tile-vs.tu{background:var(--terracota);color:#fff}
+.cambio-pr{font-family:Poppins;font-weight:600;color:var(--terracota)}
+@media (min-width:480px){ .tile{padding-left:16px;padding-right:16px} .tile-num{font-size:60px} .tile-ppc b{font-size:26px} }
+/* Agenda de la semana (alta.html v6, estilo «Weekly Schedule» de Hera) */
+body.sin-scroll{overflow:hidden}
+.ag-fondo{position:fixed;inset:0;z-index:60;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;
+  background-color:var(--ag-crema);background-image:radial-gradient(rgba(62,62,62,.05) .8px,transparent 1.2px),radial-gradient(rgba(142,74,85,.04) .8px,transparent 1.2px);
+  background-size:7px 7px,13px 13px;background-position:0 0,4px 6px;
+  padding:calc(env(safe-area-inset-top) + 18px) calc(env(safe-area-inset-right) + 16px) calc(env(safe-area-inset-bottom) + 24px) calc(env(safe-area-inset-left) + 16px)}
+.ag-hoja{max-width:940px;margin:0 auto;display:flex;flex-direction:column;gap:16px;text-align:left}
+.ag-cab{display:flex;align-items:flex-start;gap:14px}
+.ag-cab .ag-txt{flex:1;min-width:0}
+.ag-cab h2{font-family:Poppins;font-weight:600;font-size:40px;line-height:1.05;color:var(--ag-vino);letter-spacing:-.015em}
+.ag-cab .ag-disc{font-style:italic;font-size:21px;color:var(--ag-carbon);margin-top:6px}
+.ag-cab .ag-nota{font-size:16px;color:var(--gris);margin-top:4px}
+.ag-cab .ag-der{display:flex;flex-direction:column;align-items:flex-end;gap:10px;flex:none}
+.ag-logo{display:block;width:92px;height:46px;background:var(--ag-vino);-webkit-mask:url(https://static.wixstatic.com/media/9d6afa_882d2a3243604a24a1b6a47b0ad5fdbf~mv2.png/v1/fill/w_400,h_197/logo.png) center/contain no-repeat;mask:url(https://static.wixstatic.com/media/9d6afa_882d2a3243604a24a1b6a47b0ad5fdbf~mv2.png/v1/fill/w_400,h_197/logo.png) center/contain no-repeat}
+.ag-cerrar{border:1.5px solid var(--ag-vino);color:var(--ag-vino);background:#fff;border-radius:999px;padding:10px 18px;font-size:18px;font-weight:500;min-height:48px}
+.ag-cerrar:active{background:#F6ECEE}
+.ag-tabla{--hcol:112px;--d:clamp(36px,min(7.6vw,6.6vh),62px);--dm:clamp(32px,min(5.4vw,5.6vh),46px);--dd:var(--dm);--ac:2;background:rgba(255,255,255,.55);border:1.5px solid var(--ag-borde);border-radius:18px;padding:4px 12px}
+.ag-fila{display:grid;grid-template-columns:var(--hcol) repeat(var(--cols),minmax(0,1fr));align-items:center;border-top:1px solid var(--ag-borde);min-height:calc(var(--d) + 12px)}
+.ag-fila:first-child{border-top:0}
+.ag-hora{font-family:Poppins;font-weight:600;font-size:18px;color:var(--ag-carbon);white-space:nowrap;font-variant-numeric:tabular-nums}
+.ag-hora small{font-family:Poppins;font-weight:500;font-size:14px;margin-left:4px;color:var(--ag-carbon)}
+.ag-tabla.l1{--dd:var(--d);--ac:1}
+.ag-celda{display:grid;grid-template-columns:repeat(var(--ac),var(--dd));grid-auto-rows:var(--dd);align-content:center;justify-content:center;gap:4px;padding:6px 1px;min-width:0}
+.ag-c{width:var(--dd);height:var(--dd);border-radius:50%;display:grid;place-items:center;background:var(--bg);color:var(--tx);
+  font-family:Poppins;font-weight:600;font-size:max(10.5px,calc(var(--dd) * .31));letter-spacing:.03em;line-height:1}
+.ag-c.hueco{visibility:hidden}
+.ag-break{display:flex;align-items:center;gap:14px;border-top:1px solid var(--ag-borde);padding:10px 0;color:var(--ag-vino);font-family:Poppins;font-weight:600;font-size:15px;letter-spacing:.32em}
+.ag-break::before,.ag-break::after{content:'';flex:1;height:1.5px;background:var(--ag-vino);opacity:.35}
+.ag-break + .ag-fila{border-top:0}
+.ag-filtro{display:flex;flex-direction:column;gap:6px;margin-top:-4px}
+.ag-filtro p{font-size:16px;color:var(--gris)}
+.ag-leyenda{display:flex;flex-wrap:wrap;gap:8px}
+.ag-ley{display:flex;align-items:center;gap:10px;min-height:48px;background:#fff;border:1.5px solid var(--ag-borde);border-radius:999px;padding:6px 16px 6px 8px;font-size:18px;font-weight:500;color:var(--ag-carbon);text-align:left}
+.ag-ley i{width:30px;height:30px;border-radius:50%;flex:none;background:var(--bg)}
+.ag-ley[aria-pressed="true"]{border-color:var(--ag-carbon);box-shadow:inset 0 0 0 1px var(--ag-carbon)}
+.ag-leyenda.filtrada .ag-ley[aria-pressed="false"]{opacity:.5}
+@media (max-width:700px){
+  .ag-cab h2{font-size:28px} .ag-cab .ag-disc{font-size:17px} .ag-logo{width:70px;height:35px} .ag-cerrar{padding:8px 14px;font-size:16px;min-height:44px}
+  .ag-tabla{--hcol:50px;--ac:1;padding:2px 6px}
+  .ag-hora{font-size:15px;white-space:normal;line-height:1.05} .ag-hora small{display:block;margin:2px 0 0;font-size:12px}
+  .ag-celda{gap:3px}
+  .ag-leyenda{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px} .ag-ley{font-size:16px;padding:6px 10px 6px 6px;gap:8px;min-height:44px} .ag-ley i{width:26px;height:26px}
+}
 </style>
 </head>
 <body>
@@ -130,6 +312,9 @@ textarea.campo{min-height:88px;resize:vertical}
    Sin cookies ni almacenamiento: el pase de 30 min vive solo en esta pestaña. Todo se pinta con esc(). */
 const LOCAL = /\.localhost$/.test(location.hostname);
 const DEV = new URLSearchParams(location.search).has('dev');
+// pausa.herazenter.com (Olmo 23-nov): la misma página en modo «solo pausa», autoservicio y sin nada de cancelación.
+const SOLO_PAUSA = /^pausa\./.test(location.hostname) || new URLSearchParams(location.search).has('pausa');
+if (SOLO_PAUSA) document.title = 'Pausar mi plan · Hera Zenter';
 const API_URL = LOCAL ? '/_functions/checkinApi' : `https://www.herazenter.com/${DEV ? '_functions-dev' : '_functions'}/checkinApi`;
 const $app = document.getElementById('app');
 const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
@@ -147,7 +332,7 @@ const ERRORES = { verificacion: 'El correo o los 4 dígitos no coinciden con un 
   'sin-plan-chico': 'Ya no hay un plan más chico disponible. Escríbele a recepción por WhatsApp.', 'no-activa': 'Tu plan no está activo, así que no se puede pausar.',
   'no-recurrente': 'Este plan no se renueva solo, así que no hace falta pausarlo.', 'ya-cancelada-pausa': 'Este plan ya tiene su cancelación en proceso.',
   opcion: 'Elige una opción.', encuesta: 'Falta contestar algunas preguntas.', wix: 'No pudimos conectar. Intenta de nuevo en un momento.', red: 'Sin conexión. Revisa tu internet e intenta de nuevo.' };
-const S = { pase: null, nombre: '', ordenes: [], o: null, encuesta: { motivosExtra: [] }, vioOpciones: false, hc: null };
+const S = { pase: null, nombre: '', ordenes: [], o: null, encuesta: { motivosExtra: [] }, vioOpciones: false, hc: null, historias: null };
 
 async function api(accion, datos) {
   let r;
@@ -176,8 +361,8 @@ async function ocupado(btn, fn) { btn.disabled = true; try { await fn(); } final
 // ---------------------------------------------------------------- 1. correo + 4 dígitos
 function inicio(error = '') {
   pila = []; actual = { f: inicio, args: [] };
-  pinta(`<h1>Tu plan en Hera</h1>
-    <p>Aquí puedes pausar, cambiar o cancelar tu plan. Escribe el correo con el que lo compraste y los 4 últimos dígitos de tu celular.</p>
+  pinta(`<h1>${SOLO_PAUSA ? 'Pausar mi plan' : 'Tu plan en Hera'}</h1>
+    <p>${SOLO_PAUSA ? '¿Viaje, trabajo o un imprevisto? Pausa tu membresía tú misma: no se te cobra mientras está en pausa y regresas con tus mismas condiciones. Escribe el correo con el que la compraste y los 4 últimos dígitos de tu celular.' : 'Aquí puedes pausar, cambiar o cancelar tu plan. Escribe el correo con el que lo compraste y los 4 últimos dígitos de tu celular.'}</p>
     <div><label for="email">Correo</label><input id="email" class="campo" type="email" inputmode="email" autocomplete="email" autocapitalize="off" spellcheck="false"></div>
     <div><label for="ult4">4 últimos dígitos de tu celular</label><input id="ult4" class="campo" inputmode="numeric" pattern="[0-9]*" maxlength="4" autocomplete="off"></div>
     <div class="error" id="err">${esc(error)}</div>
@@ -189,7 +374,7 @@ function inicio(error = '') {
       const b = await api('bajaEntrar', { email, ult4 });
       if (!b.ok) return void (document.getElementById('err').textContent = msj(b));
       Object.assign(S, { pase: b.pase, nombre: b.nombre || '', ordenes: b.ordenes || [], hc: b.heraConmigo && b.heraConmigo.texto ? b.heraConmigo : null });
-      recap();
+      SOLO_PAUSA ? soloPausa() : recap();
     }));
   });
 }
@@ -198,7 +383,68 @@ function inicio(error = '') {
 // Nunca bloquea: si tarda más de 13 s o no hay historial, se sigue directo a su plan. «Saltar» siempre visible.
 const QUIETO = matchMedia('(prefers-reduced-motion: reduce)').matches;
 const MES_LARGO = ym => { const [y, m] = String(ym).split('-'); return `${MESES[+m - 1]} de ${y}`; };
-const ELEMENTO = { AGUA: '💧 Agua', FUEGO: '🔥 Fuego', TIERRA: '🌿 Tierra', AIRE: '🌬️ Aire' };
+// Adornos del recap (Olmo 23-nov: «más visual»). Todo es SVG/HTML fijo de esta página; lo que viene de datos pasa por esc().
+// Iconos de elemento: los mismos de la tablet (web/alta.html, EL).
+const ELEMENTO = { AIRE: ['#6F9CCB', 'Aire', '<g fill="none" stroke="#fff" stroke-width="1.9" stroke-linecap="round"><path d="M5.5 9.4h7.8a2.1 2.1 0 1 0-2.1-2.1"/><path d="M5.5 12.6h10.6a2.1 2.1 0 1 1-2.1 2.1"/><path d="M5.5 15.8h4.6"/></g>'],
+  TIERRA: ['#7A6A4F', 'Tierra', '<path fill="#fff" d="M4.8 16.6 10 8.4l2.8 4.4 1.9-2.4 4.5 6.2Z"/>'],
+  FUEGO: ['#E8613C', 'Fuego', '<path fill="#fff" d="M12 4.6c.5 2.6 4.3 4.6 4.3 8.6a4.3 4.3 0 0 1-8.6 0c0-2 1-3.2 2-4 .2 1.4.8 2.2 1.6 2.6-.2-2.6.1-5 .7-7.2Z"/>'],
+  AGUA: ['#3C8FD6', 'Agua', '<path fill="#fff" d="M12 4.8C10 8 7.8 10.6 7.8 13.6a4.2 4.2 0 0 0 8.4 0C16.2 10.6 14 8 12 4.8Z"/>'] };
+const icono = (color, dentro) => `<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="11.5" fill="${color}"/>${dentro}</svg>`;
+const ICONO_HOJA = '<path fill="#fff" d="M6.4 17.6C6.4 10.6 10.6 6.4 17.6 6.4c0 7-4.2 11.2-11.2 11.2Z"/><path fill="none" stroke="#4F7A5A" stroke-width="1.4" stroke-linecap="round" d="M7.6 16.4 14 10"/>';
+const ICONO_CORAZON = '<path fill="#fff" d="M12 18.4s-6.2-3.9-6.2-8.3A3.5 3.5 0 0 1 12 7.9a3.5 3.5 0 0 1 6.2 2.2c0 4.4-6.2 8.3-6.2 8.3Z"/>';
+// Estrella de 5 puntas «gordita» (caben 4 dígitos adentro); de y=6 a y=91 en su caja de 100.
+const ESTRELLA_D = (() => { const p = []; for (let k = 0; k < 10; k++) { const r = k % 2 ? 25 : 46, a = (k * 36 - 90) * Math.PI / 180; p.push(`${(50 + r * Math.cos(a)).toFixed(1)} ${(53 + r * Math.sin(a)).toFixed(1)}`); } return `M${p.join('L')}Z`; })();
+const DEFS_ORO = '<svg class="rc-defs" aria-hidden="true" focusable="false"><defs><linearGradient id="rc-oro" x1="0" y1="0" x2=".4" y2="1"><stop offset="0" stop-color="#FCE7B0"/><stop offset=".5" stop-color="#EFB861"/><stop offset="1" stop-color="#C7802F"/></linearGradient>'
+  + '<linearGradient id="rc-lustre" x1="0" y1="0" x2="1" y2="1"><stop offset=".3" stop-color="#fff" stop-opacity="0"/><stop offset=".5" stop-color="#fff" stop-opacity=".9"/><stop offset=".7" stop-color="#fff" stop-opacity="0"/></linearGradient>'
+  + `<clipPath id="rc-clip-est"><path d="${ESTRELLA_D}"/></clipPath></defs></svg>`;
+const textoEst = n => { const t = String(n); return `<text x="50" y="${t.length > 3 ? 60 : 62}" text-anchor="middle" font-size="${t.length > 3 ? 19 : t.length > 2 ? 24 : 29}">${esc(t)}</text>`; };
+// Ganada: dorada con brillo. Siguiente: punteada con el avance (p de 0 a 1) llenándose desde abajo.
+const estrellaOro = (n, d, chica) => `<svg class="est oro" viewBox="0 0 100 100" style="--d:${d}s" role="img" aria-label="Estrella de ${esc(n)} clases">
+  <path d="${ESTRELLA_D}" fill="url(#rc-oro)" stroke="#FBE2A8" stroke-width="5" stroke-linejoin="round"/>${chica ? '' : `<path class="lustre" d="${ESTRELLA_D}" fill="url(#rc-lustre)" opacity="0"/>`}${textoEst(n)}</svg>`;
+const estrellaSig = (n, p, d) => { const h = Math.round(85 * Math.min(1, Math.max(0, p))); return `<svg class="est sig" viewBox="0 0 100 100" style="--d:${d}s" role="img" aria-label="Siguiente estrella: ${esc(n)} clases">
+  <path d="${ESTRELLA_D}" fill="rgba(255,255,255,.1)"/><g clip-path="url(#rc-clip-est)"><rect class="llena" x="0" y="${91 - h}" width="100" height="100" fill="url(#rc-oro)" opacity=".92" style="--h:${h}px"/></g>
+  <path d="${ESTRELLA_D}" fill="none" stroke="rgba(255,255,255,.9)" stroke-width="3" stroke-dasharray="6 5" stroke-linejoin="round"/>${textoEst(n)}</svg>`; };
+function estrellasRecap(total, E) {
+  const g = E.ganadas || [], grandes = g.length <= 2 ? g : g.slice(-2), chicas = g.length <= 2 ? [] : g.slice(0, -2);   // las 2 últimas grandes, las demás chiquitas
+  const previa = g.length ? g[g.length - 1] : 0, n = grandes.length + (E.siguiente ? 1 : 0);
+  return `${DEFS_ORO}<div class="rc-est">${chicas.length ? `<div class="rc-est-chicas">${chicas.map((x, k) => estrellaOro(x, (k * 0.07).toFixed(2), true)).join('')}</div>` : ''}
+    <div class="rc-est-grandes n${n}">${grandes.map((x, k) => estrellaOro(x, (chicas.length * 0.07 + k * 0.18).toFixed(2))).join('')}${E.siguiente ? estrellaSig(E.siguiente, (total - previa) / (E.siguiente - previa), (chicas.length * 0.07 + grandes.length * 0.18 + 0.1).toFixed(2)) : ''}</div></div>`;
+}
+// Número grande que cuenta desde 0 (el lector de pantalla lee solo el final).
+const num = n => `<span class="num" data-n="${+n || 0}" aria-hidden="true">${+n || 0}</span><span class="rc-sr">${+n || 0}</span>`;
+function cuentaRecap(raiz) {
+  if (QUIETO) return;
+  raiz.querySelectorAll('[data-n]').forEach(el => {
+    const fin = +el.dataset.n; if (!Number.isFinite(fin) || fin < 2) return;
+    const t0 = performance.now() + 350, dur = Math.min(1700, 800 + fin * 6);
+    el.textContent = '0';
+    const tic = t => { if (!el.isConnected) return; const p = Math.min(1, Math.max(0, (t - t0) / dur)); el.textContent = String(Math.round(fin * (1 - Math.pow(1 - p, 3)))); if (p < 1) requestAnimationFrame(tic); };
+    requestAnimationFrame(tic);
+  });
+}
+// Hoja de calendario de su primera clase y reloj de su horario favorito.
+const hojaFecha = v => { const d = new Date(String(v).length === 10 ? v + 'T18:00:00Z' : v); if (isNaN(d)) return ''; const f = o => d.toLocaleDateString('es-MX', { ...o, timeZone: 'America/Mexico_City' });
+  return `<div class="rc-hoja" aria-hidden="true"><small>${esc(f({ month: 'short' }).replace('.', ''))}</small><b>${esc(f({ day: 'numeric' }))}</b><small>${esc(f({ year: 'numeric' }))}</small></div>`; };
+const reloj = hora => { const m = /^(\d{1,2}):(\d{2})/.exec(String(hora)); if (!m) return ''; const h = +m[1] % 12, mi = +m[2];
+  const marcas = Array.from({ length: 12 }, (_, k) => `<line x1="50" y1="${k % 3 ? 9 : 7}" x2="50" y2="${k % 3 ? 13 : 16}" transform="rotate(${k * 30} 50 50)"/>`).join('');
+  return `<svg class="rc-reloj" viewBox="0 0 100 100" aria-hidden="true"><circle cx="50" cy="50" r="46" fill="rgba(255,255,255,.1)" stroke="rgba(255,255,255,.8)" stroke-width="2.5"/>
+    <g stroke="rgba(255,255,255,.75)" stroke-width="2.5" stroke-linecap="round">${marcas}</g>
+    <line class="man" x1="50" y1="50" x2="50" y2="27" stroke="#F2C38B" stroke-width="6" stroke-linecap="round" style="--a:${h * 30 + mi / 2}deg"/>
+    <line class="man" x1="50" y1="50" x2="50" y2="15" stroke="#fff" stroke-width="3.5" stroke-linecap="round" style="--a:${mi * 6}deg"/><circle cx="50" cy="50" r="4.5" fill="#fff"/></svg>`; };
+// Fondo de cada tarjeta: un motivo por tema + confeti en las de festejo (clase «fiesta»). Sin movimiento si pidió menos movimiento.
+const azar = (a, b) => a + Math.random() * (b - a);
+const ANILLOS = (abajo = false) => `<svg class="anillos${abajo ? ' abajo' : ''}" viewBox="0 0 200 200" fill="none" stroke="currentColor"><circle cx="100" cy="100" r="98" stroke-width=".6" stroke-dasharray="1 5"/><circle cx="100" cy="100" r="84" stroke-width="1.2"/><circle cx="100" cy="100" r="68" stroke-width=".6" stroke-dasharray="14 6"/><circle cx="100" cy="100" r="52" stroke-width="1.6"/><circle cx="100" cy="100" r="36" stroke-width=".6"/></svg>`;
+const ola = (fase, amp) => { let d = `M0 ${50 + fase}`; for (let k = 0; k < 8; k++) d += ` q50 ${k % 2 ? amp : -amp} 100 0`; return `<path d="${d}"/>`; };
+const OLAS = cls => `<svg class="olas${cls}" viewBox="0 0 800 100" preserveAspectRatio="none" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round">${ola(-14, 18)}${ola(0, 26)}${ola(14, 14)}${ola(28, 22)}</svg>`;
+function motivoRecap(t) {
+  let h = t.t === 1 ? Array.from({ length: 30 }, (_, k) => `<i class="astro${k % 7 ? '' : ' brilla'}" style="left:${azar(2, 98).toFixed(1)}%;top:${azar(2, 96).toFixed(1)}%;--s:${(k % 7 ? azar(2, 4.5) : azar(10, 16)).toFixed(1)}px;--t:${azar(2.6, 5.5).toFixed(1)}s;--d:${(-azar(0, 5)).toFixed(1)}s"></i>`).join('')
+    : t.t === 2 || t.t === 4 ? OLAS('') + OLAS(' o2') : ANILLOS() + (t.t === 5 ? '' : ANILLOS(true));
+  if (/\bfiesta\b/.test(t.c || '') && !QUIETO) {
+    const C = ['#F2C38B', '#FBE7C6', '#FFFFFF', '#E9A27A', '#F6D58E'], F = ['', ' r', ' e'];
+    h += Array.from({ length: 26 }, (_, k) => `<i class="cf${F[k % 3]}" style="--x:${azar(0, 100).toFixed(1)}%;--s:${azar(6, 12).toFixed(1)}px;--c:${C[k % C.length]};--t:${azar(7, 13).toFixed(1)}s;--d:${(-azar(0, 12)).toFixed(1)}s;--dx:${azar(-60, 60).toFixed(0)}px;--r:${azar(-540, 540).toFixed(0)}deg"></i>`).join('');
+  }
+  return h;
+}
 const n1 = (n, uno, varios) => `${n} ${n === 1 ? uno : varios}`;
 // «Ana L., Sofía M. y Caro R.» (+ «y N más» si hay más frecuentes que nombres).
 const listaNombres = (ns, total) => { const mas = total - ns.length; const xs = mas > 0 ? [...ns, `${mas} más`] : ns; return xs.length > 1 ? `${xs.slice(0, -1).join(', ')} y ${xs[xs.length - 1]}` : xs[0]; };
@@ -209,61 +455,77 @@ async function recap() {
   const b = await Promise.race([api('bajaRecap', { pase: S.pase }), new Promise(r => setTimeout(() => r({}), 13000))]);
   const tarjetas = b && b.ok && b.recap ? tarjetasRecap(b.recap) : [];
   if (tarjetas.length < 3) return elegir();
-  historias(tarjetas);
+  S.historias = tarjetas;
+  verHistorias();
+}
+// Los stories son un paso más de la pila: «Atrás» desde su plan vuelve a ellos (en la última, «¿Seguimos juntas?»), no al correo.
+function verHistorias() {
+  const volvio = volviendo; paso(verHistorias);
+  pinta(`<h1>Tu historia en Hera</h1><button class="btn sec" id="otraVez">Ver mi historia otra vez</button><button class="btn pri" id="sigo">Ver mis opciones</button>`,
+    () => { on('otraVez', () => historias(S.historias, 0)); on('sigo', elegir); });
+  historias(S.historias, volvio ? S.historias.length - 1 : 0);
 }
 function tarjetasRecap(R) {
   const T = [];
   const hace = R.primera.meses >= 24 ? `Hace ${Math.floor(R.primera.meses / 12)} años` : R.primera.meses >= 2 ? `Hace ${R.primera.meses} meses` : R.primera.meses === 1 ? 'Hace un mes' : 'Hace muy poquito';
   T.push({ t: 0, h: `<div class="ante">Tu historia en Hera</div><h2>${esc(S.nombre)}, antes de decidir, mira todo lo que has hecho.</h2>` });
-  T.push({ t: 1, h: `<div class="ante">${esc(hace)}…</div><h2>Todo empezó el ${esc(fecha(R.primera.fecha))}</h2><p>Tu primera clase fue de ${esc(R.primera.titulo)}. ¿Te acuerdas cómo te sentiste al salir?</p>` });
-  T.push({ t: 3, h: `<div class="ante">Desde entonces llevas</div><div class="grande">${R.total}</div><h2>${R.total === 1 ? 'clase' : 'clases'}</h2>${R.horas ? `<p>Eso es ${n1(R.horas, 'hora', 'horas')} solo para ti, respirando, sudando y haciéndote más fuerte.</p>` : ''}` });
+  T.push({ t: 1, h: `${hojaFecha(R.primera.fecha)}<div class="ante">${esc(hace)}…</div><h2>Todo empezó el ${esc(fecha(R.primera.fecha))}</h2><p>Tu primera clase fue de ${esc(R.primera.titulo)}. ¿Te acuerdas cómo te sentiste al salir?</p>` });
+  T.push({ t: 3, c: 'fiesta', h: `<div class="ante">Desde entonces llevas</div><div class="grande">${num(R.total)}</div><h2>${R.total === 1 ? 'clase' : 'clases'}</h2>${R.horas ? `<p>Eso es ${n1(R.horas, 'hora', 'horas')} solo para ti, respirando, sudando y haciéndote más fuerte.</p>` : ''}` });
   if (R.disciplinas && R.disciplinas.length) {
     const max = R.disciplinas[0].n;
     T.push({ t: 2, h: `<div class="ante">Tu lugar favorito</div><h2>${esc(R.disciplinas[0].d)}</h2>
-      <div class="rc-lista">${R.disciplinas.map(d => `<div><span style="min-width:96px">${esc(d.d)}</span><i><s style="width:${Math.max(8, Math.round(d.n / max * 100))}%"></s></i><em>${d.n}</em></div>`).join('')}</div>
+      <div class="rc-lista">${R.disciplinas.map((d, k) => `<div><span style="min-width:96px">${esc(d.d)}</span><i><s style="width:${Math.max(8, Math.round(d.n / max * 100))}%;--d:${k * 0.18}s"></s></i><em>${+d.n || 0}</em></div>`).join('')}</div>
       ${R.nDisciplinas > 1 ? `<p>Probaste ${R.nDisciplinas} disciplinas distintas.</p>` : ''}` });
   }
-  if (R.coach) T.push({ t: 4, h: `<div class="ante">La voz que más escuchaste</div><h2>${esc(R.coach.nombre)}</h2><p>Compartieron ${R.coach.veces} clases. Te ha visto crecer clase con clase.</p>` });
-  if (R.horario) T.push({ t: 1, h: `<div class="ante">Tu momento de la semana</div><h2>Los ${esc(R.horario.dia)} a las ${esc(R.horario.hora)}</h2><p>Ahí estuviste ${R.horario.veces} veces. Ese ratito ya era tuyo.</p>` });
-  if (R.mejorMes) T.push({ t: 3, h: `<div class="ante">Tu mejor mes</div><h2>${esc(MES_LARGO(R.mejorMes.mes))}</h2><div class="grande">${R.mejorMes.n}</div><p>clases en un solo mes. ¡Qué mes!</p>` });
-  if (R.racha && R.racha.mejor >= 2) T.push({ t: 4, h: `<div class="ante">Tu mejor racha</div><div class="grande">${R.racha.mejor}</div><h2>semanas seguidas</h2>${R.racha.actual >= 2 ? `<p>Y ahorita llevas ${R.racha.actual} semanas sin fallar.</p>` : '<p>La constancia también se extraña.</p>'}` });
+  if (R.coach) T.push({ t: 4, h: `<div class="rc-voz" aria-hidden="true">${Array.from({ length: 16 }, (_, k) => `<i style="--d:${(-(k * 0.37) % 1.1).toFixed(2)}s;--k:${(0.45 + ((k * 7) % 5) / 8).toFixed(2)}"></i>`).join('')}</div><div class="ante">La voz que más escuchaste</div><h2>${esc(R.coach.nombre)}</h2><p>Compartieron ${R.coach.veces} clases. Te ha visto crecer clase con clase.</p>` });
+  if (R.horario) T.push({ t: 1, h: `${reloj(R.horario.hora)}<div class="ante">Tu momento de la semana</div><h2>Los ${esc(/s$/.test(R.horario.dia) ? R.horario.dia : R.horario.dia + 's')} a las ${esc(R.horario.hora)}</h2><p>Ahí estuviste ${R.horario.veces} veces. Ese ratito ya era tuyo.</p>` });
+  if (R.mejorMes) T.push({ t: 3, c: 'fiesta', h: `<div class="ante">Tu mejor mes</div><h2>${esc(MES_LARGO(R.mejorMes.mes))}</h2><div class="grande">${num(R.mejorMes.n)}</div><p>clases en un solo mes. ¡Qué mes!</p>` });
+  if (R.racha && R.racha.mejor >= 2) T.push({ t: 4, c: 'fiesta', h: `<div class="ante">Tu mejor racha</div><div class="grande">${num(R.racha.mejor)}</div><h2>semanas seguidas</h2>
+    <div class="rc-semanas" aria-hidden="true">${Array.from({ length: Math.min(R.racha.mejor, 16) }, (_, k) => `<i class="${k < R.racha.actual ? 'ya' : ''}" style="--d:${(k * 0.06).toFixed(2)}s"></i>`).join('')}${R.racha.mejor > 16 ? `<em>+${R.racha.mejor - 16}</em>` : ''}</div>${R.racha.actual >= 2 ? `<p>Y ahorita llevas ${R.racha.actual} semanas sin fallar.</p>` : '<p>La constancia también se extraña.</p>'}` });
   if (R.estrellas && (R.estrellas.ganadas.length || R.estrellas.siguiente)) {
-    const g = R.estrellas.ganadas;
-    T.push({ t: 0, h: `<div class="ante">Tus estrellas</div>${g.length ? `<div class="rc-estrellas">${g.map(() => '⭐').join('')}</div><h2>${g.length === 1 ? 'Ya ganaste la estrella de' : 'Ya ganaste las de'} ${g.length > 1 ? g.slice(0, -1).join(', ') + ' y ' + g[g.length - 1] : g[0]} clases</h2>` : '<h2>Tu primera estrella está cerca</h2>'}
-      ${R.estrellas.siguiente ? `<p>Te ${R.estrellas.faltan === 1 ? 'falta 1 clase' : `faltan ${R.estrellas.faltan} clases`} para la de ${R.estrellas.siguiente}.</p>` : ''}` });
+    const g = R.estrellas.ganadas, E = R.estrellas;
+    const ya = !g.length ? 'Tu primera estrella está cerca' : g.length === 1 ? `Ya ganaste la estrella de ${esc(g[0])} clases` : g.length <= 3 ? `Ya ganaste las de ${esc(g.slice(0, -1).join(', '))} y ${esc(g[g.length - 1])} clases` : `Ya ganaste ${g.length} estrellas`;
+    T.push({ t: 0, c: g.length ? 'fiesta' : '', h: `<div class="ante">Tus estrellas</div><div class="rc-llevas"><span>Llevas</span><span class="grande">${num(R.total)}</span><span>${R.total === 1 ? 'clase' : 'clases'}</span></div>
+      ${estrellasRecap(R.total, E)}<h2 style="font-size:26px">${ya}</h2>
+      ${E.siguiente ? `<p>Te ${E.faltan === 1 ? 'falta 1 clase' : `faltan ${esc(E.faltan)} clases`} para la de ${esc(E.siguiente)}.</p>` : '<p>Ya tienes todas las estrellas de Hera. ¡Eres leyenda!</p>'}` });
   }
-  const ins = (R.insignias || []).map(i => i.k === 'elemento' ? ELEMENTO[i.v] : i.k === 'miembro' ? '🌿 Miembro Hera' : i.k === 'estrella' ? `⭐ ${i.v} clases` : i.k === 'aniversario' ? `🎂 ${n1(i.v, 'año', 'años')} con nosotras` : null).filter(Boolean);
-  if (ins.length >= 2) T.push({ t: 2, h: `<div class="ante">Lo que te has ganado</div><h2>Tus insignias</h2><div class="rc-ins">${ins.map(x => `<span>${esc(x)}</span>`).join('')}</div>` });
-  if (R.compas) T.push({ t: 1, h: `<div class="ante">Tu comunidad (últimos 6 meses)</div><div class="grande">${R.compas.total}</div><h2>${R.compas.total === 1 ? 'compañera' : 'compañeras'} de clase</h2>${(R.compas.nombres || []).length ? `<p>${esc(listaNombres(R.compas.nombres, R.compas.frecuentes))} te ven seguido: coincidiste con ellas 4 veces o más. Ya eres parte de su rutina, y ellas de la tuya.</p>` : R.compas.frecuentes ? `<p>Con ${n1(R.compas.frecuentes, 'de ellas', 'de ellas')} coincidiste 4 veces o más. Ya eres parte de su rutina, y ellas de la tuya.</p>` : '<p>Cada una de ellas te vio llegar.</p>'}` });
+  const ins = (R.insignias || []).map(i => i.k === 'elemento' ? (ELEMENTO[i.v] ? [icono(ELEMENTO[i.v][0], ELEMENTO[i.v][2]), `Elemento ${ELEMENTO[i.v][1]}`] : null)
+    : i.k === 'miembro' ? [icono('#4F7A5A', ICONO_HOJA), 'Miembro Hera']
+    : i.k === 'estrella' ? [`<svg viewBox="0 0 100 100" class="est oro" aria-hidden="true" style="animation:none"><path d="${ESTRELLA_D}" fill="url(#rc-oro)" stroke="#FBE2A8" stroke-width="5" stroke-linejoin="round"/></svg>`, `${i.v} clases`]
+    : i.k === 'aniversario' ? [icono('#9A4215', ICONO_CORAZON), `${n1(i.v, 'año', 'años')} con nosotras`] : null).filter(Boolean);
+  if (ins.length >= 2) T.push({ t: 2, h: `${DEFS_ORO}<div class="ante">Lo que te has ganado</div><h2>Tus insignias</h2><div class="rc-ins">${ins.map(([ico, x], k) => `<span style="--d:${k * 0.15}s">${ico}${esc(x)}</span>`).join('')}</div>` });
+  if (R.compas) T.push({ t: 1, h: `<div class="ante">Tu comunidad (últimos 6 meses)</div><div class="grande">${num(R.compas.total)}</div><h2>${R.compas.total === 1 ? 'compañera' : 'compañeras'} de clase</h2>${(R.compas.nombres || []).length ? `<p>${esc(listaNombres(R.compas.nombres, R.compas.frecuentes))} te ven seguido: coincidiste con ellas 4 veces o más. Ya eres parte de su rutina, y ellas de la tuya.</p>` : R.compas.frecuentes ? `<p>Con ${n1(R.compas.frecuentes, 'de ellas', 'de ellas')} coincidiste 4 veces o más. Ya eres parte de su rutina, y ellas de la tuya.</p>` : '<p>Cada una de ellas te vio llegar.</p>'}` });
   const P = R.plan;
   if (P && (R.perdida || P.restantes != null)) {
     T.push({ t: 5, h: `<div class="ante">Lo que te queda</div><h2>${esc(P.nombre)}</h2>
-      ${P.restantes != null ? `<div class="grande" style="color:var(--terracota)">${P.restantes}</div><p>${P.restantes === 1 ? 'clase por usar' : 'clases por usar'}${P.hasta ? ` hasta el ${esc(fecha(P.hasta))}` : ''}${P.reservadas ? ` (${n1(P.reservadas, 'ya reservada', 'ya reservadas')})` : ''}.</p>` : ''}
+      ${P.restantes != null ? `<div class="grande" style="color:var(--terracota)">${num(P.restantes)}</div><p>${P.restantes === 1 ? 'clase por usar' : 'clases por usar'}${P.hasta ? ` hasta el ${esc(fecha(P.hasta))}` : ''}${P.reservadas ? ` (${n1(P.reservadas, 'ya reservada', 'ya reservadas')})` : ''}.</p>` : ''}
       ${R.perdida ? `<div class="rc-nota">${esc(R.perdida)}</div>` : ''}${P.descuento ? '<p>Con tu membresía también tienes 10% de descuento en talleres y eventos.</p>' : ''}` });
   }
   T.push({ t: 5, fin: true, h: `<div class="ante">${esc(S.nombre)},</div><h2>¿Seguimos juntas?</h2><p>Lo que construiste aquí es tuyo. Si algo no te está funcionando, cuéntanos: casi siempre hay una forma.</p>${avisoHc()}` });
   return T;
 }
-function historias(T) {
+function historias(T, desde = 0) {
   let i = 0, timer = null, x0 = null;
   const DUR = 7000;
   document.body.insertAdjacentHTML('beforeend', `<div class="rc t0" id="rc" role="dialog" aria-label="Tu historia en Hera">
+    <div class="rc-fondo" aria-hidden="true"><i class="bl b1"></i><i class="bl b2"></i><i class="bl b3"></i><div class="rc-motivo"></div></div>
     <div class="rc-barras">${T.map(() => '<span><b></b></span>').join('')}</div>
     <div class="rc-top"><span>Hera Zenter</span><button id="rc-saltar">Saltar</button></div>
     <button class="rc-toque izq" aria-label="Anterior"></button><button class="rc-toque der" aria-label="Siguiente"></button>
     <div class="rc-cuerpo" aria-live="polite"></div><div class="rc-fin"></div></div>`);
-  const $rc = document.getElementById('rc'), $c = $rc.querySelector('.rc-cuerpo'), $f = $rc.querySelector('.rc-fin'), barras = [...$rc.querySelectorAll('.rc-barras b')];
+  const $rc = document.getElementById('rc'), $m = $rc.querySelector('.rc-motivo'), $c = $rc.querySelector('.rc-cuerpo'), $f = $rc.querySelector('.rc-fin'), barras = [...$rc.querySelectorAll('.rc-barras b')];
   const cerrar = sig => { clearTimeout(timer); document.removeEventListener('keydown', tecla); $rc.remove(); sig(); };
   const ir = n => {
     if (n < 0) n = 0;
     if (n >= T.length) return;
     i = n; clearTimeout(timer);
     const t = T[i];
-    $rc.className = `rc t${t.t}`;
+    $rc.className = `rc t${t.t}${t.c ? ' ' + t.c : ''}`;
+    $m.innerHTML = motivoRecap(t); $m.style.animation = 'none'; void $m.offsetWidth; $m.style.animation = '';
     barras.forEach((b, k) => { b.className = k < i ? 'lleno' : ''; b.style.removeProperty('--dur'); });
     void barras[i].offsetWidth;
     barras[i].className = t.fin ? 'lleno' : 'corre';
-    $c.innerHTML = t.h;
+    $c.innerHTML = t.h; cuentaRecap($c);
     $f.innerHTML = t.fin ? `<button class="btn pri" id="rc-quedo">Sí, me quedo 💛</button><button class="btn sec" id="rc-cambio">Ver mis opciones</button>` : '';
     if (t.fin) {
       document.getElementById('rc-quedo').addEventListener('click', () => cerrar(() => pinta(`<h1>¡Qué gusto, ${esc(S.nombre)}!</h1><p>Tu plan sigue igual, no tienes que hacer nada más. Nos vemos en tu próxima clase.</p>`, null, true)));
@@ -279,7 +541,29 @@ function historias(T) {
   $rc.addEventListener('pointerdown', e => { x0 = e.clientX; if (e.target.closest('.rc-toque')) pausa(true); });
   $rc.addEventListener('pointerup', e => { pausa(false); if (x0 != null && Math.abs(e.clientX - x0) > 60) { e.preventDefault(); ir(i + (e.clientX < x0 ? 1 : -1)); } x0 = null; });
   $rc.addEventListener('pointercancel', () => { pausa(false); x0 = null; });
-  ir(0);
+  ir(Math.min(Math.max(0, desde), T.length - 1));
+}
+
+// ---------------------------------------------------------------- 1c. solo pausa (pausa.herazenter.com)
+function soloPausa() {
+  const vivas = S.ordenes.filter(o => o.recurrente);
+  if (!vivas.length) { paso(soloPausa); return pinta(`<h1>Hola, ${esc(S.nombre)}</h1><div class="aviso ok">${S.ordenes.length ? 'Tu plan es un paquete: no se renueva solo, así que no hace falta pausarlo. Tus clases siguen hasta que se terminen o venzan.' : 'No encontramos una membresía activa con tu cuenta.'}</div><p>¿Dudas? Escríbele a recepción por WhatsApp.</p>`); }
+  if (vivas.length === 1) { S.o = vivas[0]; return planPausa(); }
+  paso(soloPausa);
+  pinta(`<h1>Hola, ${esc(S.nombre)}</h1><p>Tienes más de un plan. ¿Cuál quieres pausar?</p>
+    ${vivas.map((o, i) => `<button class="op" data-i="${i}"><b>${esc(o.nombre)}</b><span>${o.pausable ? (o.pausa.min === o.pausa.max ? `Pausa de ${esc(o.pausa.texto)}` : `Pausa de hasta ${esc(o.pausa.texto)}`) : esc(ERRORES[o.noPausa] || estadoTxt(o))}</span></button>`).join('')}`,
+    () => $app.querySelectorAll('.op').forEach(b => b.addEventListener('click', () => { S.o = vivas[+b.dataset.i]; planPausa(); })));
+}
+function planPausa() {
+  const o = S.o; paso(planPausa);
+  pinta(`<h1>Hola, ${esc(S.nombre)}</h1>
+    <div class="caja"><h2>${esc(o.nombre)}</h2>
+      <div class="dato"><span>Estado</span><span>${esc(estadoTxt(o))}</span></div>
+      ${o.cobra ? `<div class="dato"><span>Próximo cobro</span><span>${esc(fecha(o.cobra))}</span></div>` : ''}
+      ${o.pausa ? `<div class="dato"><span>Pausa que trae tu plan</span><span>${o.pausa.min === o.pausa.max ? '' : 'hasta '}${esc(o.pausa.texto)}</span></div>` : ''}
+    </div>
+    ${o.pausable && o.pausa ? '<button class="btn pri" id="seguir">Pausar mi plan</button>' : `<div class="aviso">${esc(ERRORES[o.noPausa] || 'Este plan no se puede pausar desde aquí.')} Si necesitas ayuda, escríbele a recepción por WhatsApp.</div>`}`,
+    () => on('seguir', () => pausa()));
 }
 
 // ---------------------------------------------------------------- 2. su plan
@@ -323,12 +607,12 @@ function opciones() {
   const ops = [];
   if (o.pausable && o.pausa) ops.push(['pausa', o.pausa.min === o.pausa.max ? `Pausar ${o.pausa.texto}` : `Pausar hasta ${o.pausa.texto}`, 'Para imprevistos. No se te cobra mientras está en pausa y regresas con tus mismas condiciones.']);
   if (o.planChico) ops.push(['plan_chico', 'Un plan más chico', `${o.planChico.nombre}: $${Number(o.planChico.precio).toLocaleString('es-MX')} por periodo, en lugar de tu plan actual.`]);
-  ops.push(['horario', 'Otro horario o disciplina', 'Recepción te escribe hoy con opciones que te queden.']);
+  ops.push(['horario', 'Otro horario o disciplina', 'Mira los elementos, sus horarios de la semana y compara precios de membresía.']);
   pinta(`<h1>Antes de irte, ¿te sirve alguna de estas?</h1>
     ${ops.map(([k, t, d]) => `<button class="op" data-k="${k}"><b>${esc(t)}</b><span>${esc(d)}</span></button>`).join('')}
     ${avisoHc(true)}
     <button class="op" id="no"><b>No, gracias, quiero cancelar</b><span>Antes te hacemos 7 preguntas rápidas.</span></button>`, () => {
-    $app.querySelectorAll('.op[data-k]').forEach(b => b.addEventListener('click', () => (b.dataset.k === 'pausa' ? pausa() : quedarse(b.dataset.k))));
+    $app.querySelectorAll('.op[data-k]').forEach(b => b.addEventListener('click', () => (b.dataset.k === 'pausa' ? pausa() : b.dataset.k === 'horario' ? horario() : quedarse(b.dataset.k))));
     on('no', encuesta);
   });
 }
@@ -346,7 +630,7 @@ function pausa(error = '') {
     <button class="btn pri" id="ok">Pausar</button><button class="btn sec" id="volver">Volver</button>`, () => {
     on('volver', atras);
     on('ok', e => ocupado(e.currentTarget, async () => {
-      const b = await api('bajaPausar', { pase: S.pase, orderId: S.o.id, regreso: document.getElementById('regreso').value });
+      const b = await api('bajaPausar', { pase: S.pase, orderId: S.o.id, regreso: document.getElementById('regreso').value, ...(SOLO_PAUSA ? { pagina: 'pausa' } : {}) });
       if (!b.ok) return b.error === 'pase' ? inicio(ERRORES.pase) : void (document.getElementById('err').textContent = msj(b));
       pinta(`<h1>Listo, tu plan ${b.automatica ? 'quedó' : 'queda'} en pausa</h1>
         <div class="caja"><div class="dato"><span>Regresas el</span><span>${esc(fecha(b.regreso))}</span></div>
@@ -368,6 +652,218 @@ function quedarse(opcion) {
       pinta(`<h1>¡Qué gusto que te quedes!</h1><p>Recepción te escribe hoy por WhatsApp.${b.folio ? ` Tu folio es <b>${esc(b.folio)}</b>.` : ''}</p>`, null, true);
     }));
   });
+}
+
+// ---------------------------------------------------------------- 3b. otro horario o disciplina (Olmo 23-nov): lo de la tablet
+// «¿Qué elemento va contigo?» → «Membresías <Elemento>» (¿cuántas clases?) → ¿cada cuánto? → «Cambiar a <plan>». Solo
+// membresías, sin cobro ni alta: recepción le escribe para hacer el cambio. Catálogo y semana: bajaCatalogo (caché de alta).
+const EL = { AIRE: ['var(--aire)', 'Aire', '<g fill="none" stroke="#fff" stroke-width="1.9" stroke-linecap="round"><path d="M5.5 9.4h7.8a2.1 2.1 0 1 0-2.1-2.1"/><path d="M5.5 12.6h10.6a2.1 2.1 0 1 1-2.1 2.1"/><path d="M5.5 15.8h4.6"/></g>'],
+  TIERRA: ['var(--tierra-el)', 'Tierra', '<path fill="#fff" d="M4.8 16.6 10 8.4l2.8 4.4 1.9-2.4 4.5 6.2Z"/>'],
+  FUEGO: ['var(--fuego)', 'Fuego', '<path fill="#fff" d="M12 4.6c.5 2.6 4.3 4.6 4.3 8.6a4.3 4.3 0 0 1-8.6 0c0-2 1-3.2 2-4 .2 1.4.8 2.2 1.6 2.6-.2-2.6.1-5 .7-7.2Z"/>'],
+  AGUA: ['var(--agua)', 'Agua', '<path fill="#fff" d="M12 4.8C10 8 7.8 10.6 7.8 13.6a4.2 4.2 0 0 0 8.4 0C16.2 10.6 14 8 12 4.8Z"/>'] };
+const ORDEN_EL = ['AIRE', 'TIERRA', 'FUEGO', 'AGUA'];
+const CLASES_REF = 12;                                   // la tablet: el precio grande y la cinta «★ El más elegido» son del de 12
+const svgEl = (el, t = 52) => { const e = EL[el]; return e ? `<svg width="${t}" height="${t}" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="11.5" fill="${e[0]}"/>${e[2]}</svg>` : ''; };
+const ICO_CAL = '<svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3.5" y="5" width="17" height="15" rx="2.5"/><path d="M3.5 10h17M8 3v4M16 3v4"/></svg>';
+const pesos = n => '$' + Number(n || 0).toLocaleString('es-MX', { maximumFractionDigits: 0 });
+const lista = xs => { const v = (xs || []).filter(Boolean); return v.length < 2 ? (v[0] || '') : v.slice(0, -1).join(', ') + ' y ' + v[v.length - 1]; };
+const cadaDe = t => { const m = /^(\d+) (.+)$/.exec(t || ''); return !m ? (t || '') : m[1] === '1' ? (m[2] === 'mes' ? 'al mes' : 'cada ' + m[2]) : 'cada ' + t; };
+const precioCon = p => `${pesos(p.precio)} ${cadaDe(p.cicloTexto)}`.trim();
+/** «AIRE - Membresia 4 Clases» → «Aire · Membresía 4 clases» (igual que la tablet). */
+const nombreLimpio = n => { const t = String(n || '').replace(/\*/g, '').trim(), x = /^(AIRE|TIERRA|FUEGO|AGUA)\s*-?\s*(.+)$/i.exec(t);
+  if (!x || !EL[x[1].toUpperCase()]) return t;
+  const r = x[2].replace(/\bmembres[ií]a\b/i, 'Membresía').replace(/\bclases\b/i, 'clases');
+  return EL[x[1].toUpperCase()][1] + ' · ' + r.charAt(0).toUpperCase() + r.slice(1); };
+const ppc = p => p.precioPorClase || Infinity;
+const desde = xs => Math.min(...xs.map(ppc));
+const clave = p => (p.ilimitada ? 'ilimitada' : String(p.clases));
+let CAT = null, HOR = {};
+async function catalogo() {
+  if (CAT) return CAT;
+  const b = await api('bajaCatalogo', { pase: S.pase });
+  if (!b.ok) return b;
+  HOR = {}; for (const d of b.horarios || []) if (d && Array.isArray(d.semana)) HOR[d.nombre] = d.semana;
+  CAT = { ok: true, planes: b.planes || [], elementos: b.elementos || {} };
+  return CAT;
+}
+const delElemento = el => CAT.planes.filter(p => p.elemento === el);
+function disciplinasDeElemento(el) {
+  const e = CAT.elementos[el];
+  if (e && e.disciplinas && e.disciplinas.length) return e.disciplinas;
+  const p = CAT.planes.find(x => x.elemento === el && x.textoDisciplinas);
+  return p ? [p.textoDisciplinas] : [];
+}
+/** Lo que cuesta al mes (para comparar ciclos distintos): un mes = 365/12 días, como la tablet. */
+const alMes = (precio, dias) => precio / (dias / (365 / 12));
+/** Comparación con su plan: «$300 menos al mes que tu plan» / «$200 más al mes» / «Tu plan actual». '' si no se sabe. */
+function vsTuPlan(p) {
+  const o = S.o;
+  if (p.planId === o.planId) return '<span class="tile-vs tu">Tu plan actual</span>';
+  if (!o.precio || !o.diasCiclo || !p.diasCiclo) return '';
+  const mismo = Math.abs(p.diasCiclo - o.diasCiclo) < 1;
+  const d = Math.round(mismo ? p.precio - o.precio : alMes(p.precio, p.diasCiclo) - alMes(o.precio, o.diasCiclo));
+  const cada = mismo ? cadaDe(o.cicloTexto) : 'al mes', aprox = mismo ? '' : '≈ ';
+  if (Math.abs(d) < 1) return '<span class="tile-vs mas">Mismo precio que tu plan</span>';
+  return d < 0 ? `<span class="tile-vs">${aprox}${esc(pesos(-d))} menos ${esc(cada)} que tu plan</span>` : `<span class="tile-vs mas">${aprox}${esc(pesos(d))} más ${esc(cada)} que tu plan</span>`;
+}
+const hoyTienes = () => { const o = S.o;
+  return `<div class="hoy">${svgEl(o.elemento, 36)}<div><small>Hoy tienes</small><b>${esc(nombreLimpio(o.nombre))}</b>${o.precio ? ` · <span class="pr">${esc(pesos(o.precio))}</span> ${esc(cadaDe(o.cicloTexto) || 'por periodo')}` : ''}</div></div>`; };
+// Las tarjetas son role="button" (no <button>, adentro va «Ver horarios»): Enter y espacio también las eligen.
+const conTeclado = n => n.addEventListener('keydown', e => { if ((e.key === 'Enter' || e.key === ' ') && e.target === n) { e.preventDefault(); n.click(); } });
+
+/** «¿Qué elemento va contigo?»: las 4 fichas de la tablet, con su elemento marcado. */
+async function horario() {
+  paso(horario);
+  if (!CAT) {
+    pinta('<div class="cargando"><i></i><p>Cargando elementos y horarios…</p></div>');
+    const c = await catalogo();
+    if (!actual || actual.f !== horario) return;                  // se fue a otra pantalla mientras cargaba
+    if (!c.ok) {
+      if (c.error === 'pase') return inicio(ERRORES.pase);
+      return pinta(`<h1>Otro horario o disciplina</h1><div class="aviso">${esc(msj(c))}</div><button class="btn pri" id="mismo">Que recepción me escriba con opciones</button>`, () => on('mismo', () => quedarse('horario')));
+    }
+  }
+  const o = S.o, els = ORDEN_EL.filter(el => delElemento(el).length);
+  pinta(`<h1>¿Qué elemento va contigo?</h1>
+    <p>Cada elemento incluye distintas disciplinas. Mira sus horarios y compara precios antes de decidir.</p>
+    ${hoyTienes()}
+    <div class="el-lista">${els.map(el => {
+      const ds = disciplinasDeElemento(el), xs = delElemento(el), cortas = xs.filter(p => !p.largo);
+      const doce = cortas.filter(p => !p.ilimitada && p.clases === CLASES_REF), d = doce.length ? desde(doce) : desde(cortas.length ? cortas : xs), tuyo = el === o.elemento;
+      const disc = ds.length ? `<div class="el-disc-tit">Incluye</div><ul class="el-disc">${ds.map(x => `<li><i style="background:${colorDe(x)[0]}" aria-hidden="true"></i>${esc(x)}</li>`).join('')}</ul>` : '';
+      const ver = ds.some(x => (HOR[x] || []).length) ? `<button type="button" class="ver-ag" data-agenda="${el}">${ICO_CAL}Ver horarios de la semana</button>` : '';
+      return `<div class="el-carta${tuyo ? ' tuyo' : ''}" data-e="${el}" role="button" tabindex="0" aria-label="${esc(`Elegir ${EL[el][1]}. Incluye ${lista(ds)}`)}" style="--c:${EL[el][0]}${el === 'AGUA' ? ';--o:.24' : ''}">
+        <div class="el-cab">${svgEl(el, 52)}<div class="el-nom"><h2>${EL[el][1]}</h2>${tuyo ? '<span class="tu-et">Tu elemento</span>' : ''}</div>${Number.isFinite(d) ? `<div class="el-precio"><small>${doce.length ? `con ${CLASES_REF} clases` : 'desde'}</small><b>${esc(pesos(d))}</b><span>/clase</span></div>` : ''}</div>
+        <div class="el-cuerpo">${disc}${ver}<div class="el-pie">Elegir ${EL[el][1]} ›</div></div></div>`;
+    }).join('')}</div>
+    <button class="btn sec" id="mismo">Solo quiero otro horario con mi mismo plan</button>`, () => {
+    $app.querySelectorAll('.el-carta').forEach(c => { conTeclado(c); c.addEventListener('click', e => {
+      const b = e.target.closest('[data-agenda]');
+      if (b) { e.stopPropagation(); return abrirAgenda(b.dataset.agenda, b); }
+      clasesDe(c.dataset.e);
+    }); });
+    on('mismo', () => quedarse('horario'));
+  });
+}
+
+/** «Membresías <Elemento>»: una ficha por número de clases (precio por clase grande, el cobro y cuánto cambia contra su plan). */
+function clasesDe(el) {
+  paso(clasesDe, el);
+  const ps = delElemento(el), grupos = [...new Set(ps.map(clave))].sort((a, b) => (a === 'ilimitada') - (b === 'ilimitada') || +a - +b);
+  const fichas = grupos.map(g => {
+    const xs = ps.filter(p => clave(p) === g), cortas = xs.filter(p => !p.largo);
+    // Como la tablet: si hay de cada mes, el número grande y el cobro son los suyos; las de pago por adelantado van al elegir.
+    const rep = (cortas.length ? cortas : xs).reduce((a, b) => (ppc(b) < ppc(a) ? b : a));
+    return { g, xs, rep, top: ppc(rep) };
+  });
+  // «El más barato por clase» solo si uno lo es de verdad (empates: ninguno).
+  const mins = fichas.filter(f => f.top === Math.min(...fichas.map(x => x.top))), mejor = mins.length === 1 ? mins[0].top : NaN;
+  pinta(`<h1>Membresías ${esc(EL[el][1])}</h1><p>¿Cuántas clases? Entre más clases, menos pagas por cada una.</p>${hoyTienes()}
+    <div class="tiles">${fichas.map(({ g, xs, rep, top }) => {
+      const elegida = g === String(CLASES_REF), fr = rep.frecuencia || 'al mes';
+      const num = g === 'ilimitada' ? '<span class="tile-num txt">Ilimitadas</span>' : `<span class="tile-num">${esc(g)}</span><span class="tile-unidad">clases ${esc(fr)}</span>`;
+      const otras = xs.filter(p => p !== rep).map(p => p.etiquetaDuracion).filter(Boolean);
+      const tuya = xs.find(p => p.planId === S.o.planId);
+      return `<button class="tile${elegida ? ' elegida' : ''}" data-g="${esc(g)}">${elegida ? '<span class="cinta">★ El más elegido</span>' : !elegida && Number.isFinite(mejor) && top === mejor ? '<span class="mejor">El más barato por clase</span>' : ''}${num}<span class="tile-sep"></span>
+        ${Number.isFinite(ppc(rep)) ? `<span class="tile-ppc"><b>${esc(pesos(ppc(rep)))}</b> por clase</span>` : ''}<small>${esc(precioCon(rep))}</small>
+        ${otras.length ? `<small class="tile-otras">También: ${esc(lista(otras))}</small>` : ''}${vsTuPlan(tuya || rep)}</button>`;
+    }).join('')}</div>`, () => {
+    $app.querySelectorAll('.tile').forEach(b => b.addEventListener('click', () => {
+      const xs = ps.filter(p => clave(p) === b.dataset.g);
+      xs.length === 1 ? cambio(xs[0].planId) : duracion(el, b.dataset.g);
+    }));
+  });
+}
+
+/** ¿Cada cuánto? Solo si ese número de clases tiene varias formas de pagar (cada mes, trimestral, semestral…). */
+function duracion(el, g) {
+  paso(duracion, el, g);
+  const xs = delElemento(el).filter(p => clave(p) === g).sort((a, b) => (a.diasCiclo || 0) - (b.diasCiclo || 0)), m0 = desde(xs), mejor = xs.filter(p => ppc(p) === m0).length === 1 ? m0 : NaN;
+  pinta(`<h1>¿Cada cuánto quieres pagar?</h1><p>${esc(EL[el][1])} · ${g === 'ilimitada' ? 'clases ilimitadas' : `${esc(g)} clases ${esc(xs[0].frecuencia || 'al mes')}`}. Elige cada cuánto se cobra.</p>
+    <div class="tiles">${xs.map((p, i) => `<button class="tile${ppc(p) === mejor ? ' destacada' : ''}" data-i="${i}">${ppc(p) === mejor ? '<span class="mejor">El más barato por clase</span>' : ''}
+      <span class="tile-num txt">${esc(p.etiquetaDuracion)}</span><span class="tile-sep"></span>
+      ${p.precioPorClase ? `<span class="tile-ppc"><b>${esc(pesos(p.precioPorClase))}</b> por clase</span>` : ''}
+      <small>${esc(precioCon(p))}${p.largo ? ' (se cobra por adelantado)' : ''}</small>${vsTuPlan(p)}</button>`).join('')}</div>`, () => {
+    $app.querySelectorAll('.tile').forEach(b => b.addEventListener('click', () => cambio(xs[+b.dataset.i].planId)));
+  });
+}
+
+/** «Cambiar a <plan>»: su plan sigue hasta el fin del periodo y recepción le escribe hoy para hacer el cambio. */
+function cambio(planId) {
+  const o = S.o, p = CAT.planes.find(x => x.planId === planId);
+  if (!p || planId === o.planId) return quedarse('horario');      // su mismo plan: otro horario con su mismo plan
+  paso(cambio, planId);
+  pinta(`<h1>Cambiar a ${esc(nombreLimpio(p.nombre))}</h1>
+    <div class="caja"><h2>${esc(nombreLimpio(p.nombre))}</h2>
+      <div class="dato"><span>Precio</span><span class="cambio-pr">${esc(precioCon(p))}</span></div>
+      ${p.precioPorClase ? `<div class="dato"><span>Por clase</span><span>${esc(pesos(p.precioPorClase))}</span></div>` : ''}
+      ${p.largo ? '<div class="dato"><span>Cobro</span><span>Por adelantado, en un solo pago</span></div>' : ''}
+      ${o.precio ? `<div class="dato"><span>Tu plan hoy</span><span>${esc(precioCon(o))}</span></div>` : ''}
+    </div>
+    ${vsTuPlan(p) ? `<div>${vsTuPlan(p)}</div>` : ''}
+    <p>Tu plan actual (${esc(nombreLimpio(o.nombre))}) sigue igual hasta el <b>${esc(fecha(o.fin))}</b>. Recepción te escribe hoy por WhatsApp para hacer el cambio; desde aquí no se cobra nada.</p>
+    <div class="error" id="err"></div>
+    <div class="par"><button class="btn pri" id="ok">Sí, quiero este plan</button><button class="btn sec" id="volver">Volver</button></div>`, () => {
+    on('volver', atras);
+    on('ok', e => ocupado(e.currentTarget, async () => {
+      const b = await api('bajaQuedarse', { pase: S.pase, orderId: o.id, opcion: 'horario', planId: p.planId });
+      if (!b.ok) return b.error === 'pase' ? inicio(ERRORES.pase) : void (document.getElementById('err').textContent = b.error === 'plan' ? 'Ese plan ya no está disponible. Elige otro, por favor.' : msj(b));
+      pinta(`<h1>¡Qué gusto que te quedes!</h1><p>Recepción te escribe hoy por WhatsApp para cambiarte a <b>${esc(nombreLimpio(p.nombre))}</b>. Tu plan actual sigue hasta el ${esc(fecha(o.fin))}.${b.folio ? ` Tu folio es <b>${esc(b.folio)}</b>.` : ''}</p>`, null, true);
+    }));
+  });
+}
+
+/* Agenda de la semana (alta.html v6): filas = horas, columnas = días, un círculo por clase con el color de su disciplina; la
+   leyenda filtra. Se pinta encima de la página y se quita al cerrar. */
+const COLOR_DISC = [[/reformer/i, 'var(--ag-vino)', '#fff'], [/\bmat\b/i, 'var(--ag-naranja)', '#1A1A1A'], [/barre/i, 'var(--ag-salvia)', '#1A1A1A'], [/yoga/i, 'var(--ag-azul)', '#1A1A1A']];
+const colorDe = n => (COLOR_DISC.find(([re]) => re.test(n)) || [null, 'var(--ag-carbon)', '#fff']).slice(1);
+const DIAS_SEMANA = [1, 2, 3, 4, 5, 6, 0], DIAS_CORTOS = ['DOM', 'LUN', 'MAR', 'MIÉ', 'JUE', 'VIE', 'SÁB'], DIAS_LARGOS = ['domingo', 'lunes', 'martes', 'miércoles', 'jueves', 'viernes', 'sábado'];
+/** '18:30' → ['6:30', 'PM'] */
+const hora12 = h => { const [H, M] = String(h).split(':').map(Number); return [`${H % 12 || 12}:${String(M).padStart(2, '0')}`, H < 12 ? 'AM' : 'PM']; };
+let agEl = null, agFiltro = null, agDesde = null;
+function abrirAgenda(el, boton) {
+  if (!EL[el]) return;
+  agEl = el; agFiltro = null; agDesde = boton || null;
+  document.body.insertAdjacentHTML('beforeend', `<div class="ag-fondo" id="agenda" role="dialog" aria-modal="true" aria-labelledby="agTit"><div class="ag-hoja">
+    <div class="ag-cab"><div class="ag-txt"><h2 id="agTit"></h2><p class="ag-disc" id="agDisc"></p><p class="ag-nota">Horarios con lugar en los próximos 14 días.</p></div>
+      <div class="ag-der"><button class="ag-cerrar" id="agCerrar">Cerrar ✕</button><span class="ag-logo" role="img" aria-label="Hera Zenter"></span></div></div>
+    <div class="ag-filtro"><div class="ag-leyenda" id="agLeyenda"></div><p id="agAyuda"></p></div>
+    <div class="ag-tabla" id="agGrid"></div></div></div>`);
+  document.getElementById('agCerrar').addEventListener('click', cerrarAgenda);
+  document.body.classList.add('sin-scroll');
+  pintarAgenda();
+  setTimeout(() => { const c = document.getElementById('agCerrar'); if (c) c.focus(); }, 30);
+}
+function cerrarAgenda() {
+  const a = document.getElementById('agenda'); if (!a) return;
+  a.remove(); document.body.classList.remove('sin-scroll');
+  if (agDesde && document.contains(agDesde)) agDesde.focus();
+  agDesde = null;
+}
+document.addEventListener('keydown', e => { if (e.key === 'Escape' && document.getElementById('agenda')) cerrarAgenda(); });
+function pintarAgenda() {
+  const ds = disciplinasDeElemento(agEl).filter(x => (HOR[x] || []).length), vis = agFiltro ? ds.filter(x => x === agFiltro) : ds;
+  const dias = DIAS_SEMANA.filter(d => d !== 0 || ds.some(x => HOR[x].some(c => c.d === 0)));
+  const horas = [...new Set(vis.flatMap(x => HOR[x].map(c => c.h)))].sort();
+  document.getElementById('agTit').textContent = `Horarios · ${EL[agEl][1]}`;
+  document.getElementById('agDisc').textContent = lista(ds);
+  const circulo = (x, d, h) => { const [bg, tx] = colorDe(x), [hh, ap] = hora12(h);
+    return `<span class="ag-c" role="img" style="--bg:${bg};--tx:${tx}" aria-label="${esc(`${x}, ${DIAS_LARGOS[d]} ${hh} ${ap}`)}">${DIAS_CORTOS[d]}</span>`; };
+  const grid = document.getElementById('agGrid');
+  grid.style.setProperty('--cols', dias.length);
+  grid.classList.toggle('l1', vis.length === 1);
+  grid.innerHTML = horas.map((h, i) => {
+    const [hh, ap] = hora12(h);
+    const brk = i && horas[i - 1] < '13:00' && h >= '13:00' ? '<div class="ag-break" role="separator">BREAK</div>' : '';
+    return brk + `<div class="ag-fila"><div class="ag-hora">${esc(hh)}<small>${ap}</small></div>${dias.map(d =>
+      `<div class="ag-celda">${vis.map(x => HOR[x].some(c => c.d === d && c.h === h) ? circulo(x, d, h) : '<span class="ag-c hueco" aria-hidden="true"></span>').join('')}</div>`).join('')}</div>`;
+  }).join('');
+  document.getElementById('agAyuda').textContent = ds.length > 1 ? (agFiltro ? 'Toca la misma otra vez para ver todas.' : 'Toca una disciplina para ver solo esa.') : '';
+  const ley = document.getElementById('agLeyenda');
+  ley.classList.toggle('filtrada', !!agFiltro);
+  ley.innerHTML = ds.map((x, i) => `<button type="button" class="ag-ley" data-i="${i}" aria-pressed="${agFiltro === x}"${ds.length < 2 ? ' disabled' : ''}><i style="--bg:${colorDe(x)[0]}" aria-hidden="true"></i>${esc(x)}</button>`).join('');
+  ley.querySelectorAll('[data-i]').forEach(b => b.addEventListener('click', () => { const x = ds[+b.dataset.i]; agFiltro = agFiltro === x ? null : x; pintarAgenda();
+    const otra = ley.querySelector(`[data-i="${b.dataset.i}"]`); if (otra) otra.focus(); }));
 }
 
 // ---------------------------------------------------------------- 4. encuesta (5 obligatorias de un toque, BAJ4-A)
