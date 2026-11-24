@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
 <meta charset="utf-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-OkvztAk4HedY6AeKgeULicPQivf3QYTLpth7den2PCc=' https://cdnjs.cloudflare.com; style-src 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src https://static.wixstatic.com data:; connect-src https://www.herazenter.com 'self'; manifest-src 'self'; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-Yaswj9Zinnm00BRnCaLnsHTRrPv9GWBMd2xueIA8dlo=' https://cdnjs.cloudflare.com; style-src 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src https://static.wixstatic.com data:; connect-src https://www.herazenter.com 'self'; manifest-src 'self'; base-uri 'none'; form-action 'none'">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="robots" content="noindex, nofollow">
 <meta name="referrer" content="no-referrer">
@@ -51,6 +51,8 @@ textarea.campo{min-height:88px;resize:vertical}
 .btn.pri{background:var(--terracota);color:#fff}
 .btn.sec{background:#fff;color:var(--carbon);border:1.5px solid var(--crema)}
 .btn:active{filter:brightness(.94)}
+.atras{display:inline-flex;align-items:center;gap:6px;min-height:44px;padding:8px 0;margin:-10px 0 2px;font-size:16px;font-weight:500;color:var(--carbon);opacity:.8}
+.atras:active{opacity:1}
 .btn[disabled]{opacity:.55}
 .op{display:block;width:100%;text-align:left;background:#fff;border:1.5px solid var(--crema);border-radius:var(--radio);padding:16px;min-height:56px}
 .op b{display:block;font-family:Poppins;font-weight:600;font-size:17px;color:var(--carbon)}
@@ -156,12 +158,24 @@ async function api(accion, datos) {
   return b && typeof b === 'object' ? b : { ok: false, error: 'wix' };
 }
 const msj = b => (b.error === 'verificacion' && b.segundos > 3 ? ERRORES.verificacion + ` Espera ${b.segundos} segundos antes de volver a intentar.` : ERRORES[b.error] || ERRORES.wix);
-function pinta(html, alPintar) { $app.innerHTML = `<section class="vista">${html}</section>`; window.scrollTo(0, 0); if (alPintar) alPintar(); }
+// Botón «Atrás» en cada pantalla después de entrar (Olmo, 23-nov): una pila de pantallas. En las finales (ya se hizo algo)
+// el botón es «Inicio» y vuelve a pedir correo y 4 dígitos (así ve su plan ya actualizado).
+let pila = [], actual = null, volviendo = false;
+function paso(f, ...args) { if (actual && !volviendo && actual.f !== f) pila.push(actual); volviendo = false; actual = { f, args }; }
+function atras() { const p = pila.pop(); if (!p) return reiniciar(); volviendo = true; actual = null; p.f(...p.args); }
+function reiniciar() { pila = []; actual = null; S.pase = null; inicio(); }
+function pinta(html, alPintar, final = false) {
+  const nav = !actual || actual.f === inicio ? '' : final ? '<button class="atras" id="atras">← Inicio</button>' : '<button class="atras" id="atras">← Atrás</button>';
+  $app.innerHTML = `<section class="vista">${nav}${html}</section>`; window.scrollTo(0, 0);
+  const b = document.getElementById('atras'); if (b) b.addEventListener('click', final ? reiniciar : atras);
+  if (alPintar) alPintar();
+}
 const on = (id, fn) => { const e = document.getElementById(id); if (e) e.addEventListener('click', fn); };
 async function ocupado(btn, fn) { btn.disabled = true; try { await fn(); } finally { if (document.body.contains(btn)) btn.disabled = false; } }
 
 // ---------------------------------------------------------------- 1. correo + 4 dígitos
 function inicio(error = '') {
+  pila = []; actual = { f: inicio, args: [] };
   pinta(`<h1>Tu plan en Hera</h1>
     <p>Aquí puedes pausar, cambiar o cancelar tu plan. Escribe el correo con el que lo compraste y los 4 últimos dígitos de tu celular.</p>
     <div><label for="email">Correo</label><input id="email" class="campo" type="email" inputmode="email" autocomplete="email" autocapitalize="off" spellcheck="false"></div>
@@ -252,7 +266,7 @@ function historias(T) {
     $c.innerHTML = t.h;
     $f.innerHTML = t.fin ? `<button class="btn pri" id="rc-quedo">Sí, me quedo 💛</button><button class="btn sec" id="rc-cambio">Ver mis opciones</button>` : '';
     if (t.fin) {
-      document.getElementById('rc-quedo').addEventListener('click', () => cerrar(() => pinta(`<h1>¡Qué gusto, ${esc(S.nombre)}!</h1><p>Tu plan sigue igual, no tienes que hacer nada más. Nos vemos en tu próxima clase.</p>`)));
+      document.getElementById('rc-quedo').addEventListener('click', () => cerrar(() => pinta(`<h1>¡Qué gusto, ${esc(S.nombre)}!</h1><p>Tu plan sigue igual, no tienes que hacer nada más. Nos vemos en tu próxima clase.</p>`, null, true)));
       document.getElementById('rc-cambio').addEventListener('click', () => cerrar(elegir));
     } else if (!QUIETO) timer = setTimeout(() => ir(i + 1), DUR);
   };
@@ -271,16 +285,17 @@ function historias(T) {
 // ---------------------------------------------------------------- 2. su plan
 function elegir() {
   const vivas = S.ordenes.filter(o => o.recurrente);
-  if (!vivas.length && !S.ordenes.length) return pinta(`<h1>Hola, ${esc(S.nombre)}</h1><p>No encontramos un plan activo con tu cuenta, así que no hay nada que cancelar. Si crees que es un error, escríbele a recepción por WhatsApp.</p>`);
+  if (!vivas.length && !S.ordenes.length) { paso(elegir); return pinta(`<h1>Hola, ${esc(S.nombre)}</h1><p>No encontramos un plan activo con tu cuenta, así que no hay nada que cancelar. Si crees que es un error, escríbele a recepción por WhatsApp.</p>`); }
   if (!vivas.length) return soloPaquete();
   if (vivas.length === 1) { S.o = vivas[0]; return plan(); }
+  paso(elegir);
   pinta(`<h1>Hola, ${esc(S.nombre)}</h1><p>Tienes más de un plan. ¿Cuál quieres revisar?</p>
     ${vivas.map((o, i) => `<button class="op" data-i="${i}"><b>${esc(o.nombre)}</b><span>${o.cobra ? 'Se renueva el ' + esc(fecha(o.cobra)) : esc(estadoTxt(o))}</span></button>`).join('')}`,
     () => $app.querySelectorAll('.op').forEach(b => b.addEventListener('click', () => { S.o = vivas[+b.dataset.i]; plan(); })));
 }
 const estadoTxt = o => (o.estado === 'PAUSED' ? 'En pausa' : o.yaCancelada ? 'Cancelación en proceso' : 'Activa');
 function plan() {
-  const o = S.o;
+  const o = S.o; paso(plan);
   if (o.folio || o.yaCancelada) return pinta(`<h1>${esc(o.nombre)}</h1><div class="aviso ok">${o.folio ? `Ya pediste tu cancelación. Tu folio es <b>${esc(o.folio)}</b>.` : 'Este plan ya está cancelado y no se volverá a cobrar.'} Conservas tus clases hasta el ${esc(fecha(o.fin))}.</div>
     <p>¿Dudas? Escríbele a recepción por WhatsApp.</p>`);
   pinta(`<h1>Hola, ${esc(S.nombre)}</h1>
@@ -293,15 +308,17 @@ function plan() {
     <button class="btn pri" id="seguir">Quiero hacer un cambio</button>`, () => on('seguir', opciones));
 }
 function soloPaquete() {
+  paso(soloPaquete);
   pinta(`<h1>Hola, ${esc(S.nombre)}</h1>
     <div class="aviso ok">Tu plan es un paquete: no se renueva solo, así que no hay nada que cancelar. Tus clases siguen hasta que se terminen o venzan.</div>
     <p>¿Nos ayudas a mejorar contestando 5 preguntas? Toma 2 minutos.</p>
     <button class="btn pri" id="si">Contestar</button><button class="btn sec" id="no">No, gracias</button>`,
-    () => { on('si', () => { S.o = null; encuesta(); }); on('no', () => pinta('<h1>Gracias</h1><p>Aquí te esperamos.</p>')); });
+    () => { on('si', () => { S.o = null; encuesta(); }); on('no', () => pinta('<h1>Gracias</h1><p>Aquí te esperamos.</p>', null, true)); });
 }
 
 // ---------------------------------------------------------------- 3. opciones para quedarse (una sola vez, el «no» del mismo tamaño)
 function opciones() {
+  paso(opciones);
   const o = S.o; S.vioOpciones = true;
   const ops = [];
   if (o.pausable && o.pausa) ops.push(['pausa', o.pausa.min === o.pausa.max ? `Pausar ${o.pausa.texto}` : `Pausar hasta ${o.pausa.texto}`, 'Para imprevistos. No se te cobra mientras está en pausa y regresas con tus mismas condiciones.']);
@@ -316,6 +333,7 @@ function opciones() {
   });
 }
 function pausa(error = '') {
+  paso(pausa);
   // BAJ12-A: el tope viene del backend según el plan (mensual 1 semana fija; trimestral 1 semana; semestral 2; anual 1 mes).
   const P = S.o.pausa, fija = P.desde === P.hasta;
   const cada = P.porCiclo ? 'una vez en cada periodo de tu plan' : 'una vez al año';
@@ -326,7 +344,7 @@ function pausa(error = '') {
     <div><label for="regreso">Regreso el</label><input id="regreso" class="campo" type="date" min="${esc(P.desde)}" max="${esc(P.hasta)}" value="${esc(P.hasta)}"></div>`}
     <div class="error" id="err">${esc(error)}</div>
     <button class="btn pri" id="ok">Pausar</button><button class="btn sec" id="volver">Volver</button>`, () => {
-    on('volver', opciones);
+    on('volver', atras);
     on('ok', e => ocupado(e.currentTarget, async () => {
       const b = await api('bajaPausar', { pase: S.pase, orderId: S.o.id, regreso: document.getElementById('regreso').value });
       if (!b.ok) return b.error === 'pase' ? inicio(ERRORES.pase) : void (document.getElementById('err').textContent = msj(b));
@@ -334,19 +352,20 @@ function pausa(error = '') {
         <div class="caja"><div class="dato"><span>Regresas el</span><span>${esc(fecha(b.regreso))}</span></div>
         ${b.cobro ? `<div class="dato"><span>Tu cobro se retoma aprox. el</span><span>${esc(fecha(b.cobro))}</span></div>` : ''}
         <div class="dato"><span>Folio</span><span>${esc(b.folio)}</span></div></div>
-        <p>${b.automatica ? 'No se te cobra mientras está en pausa.' : 'Recepción la aplica hoy y te confirma por WhatsApp.'}</p>`);
+        <p>${b.automatica ? 'No se te cobra mientras está en pausa.' : 'Recepción la aplica hoy y te confirma por WhatsApp.'}</p>`, null, true);
     }));
   });
 }
 function quedarse(opcion) {
+  paso(quedarse, opcion);
   const o = S.o, t = opcion === 'plan_chico' ? `Cambiar a ${o.planChico.nombre}` : 'Otro horario o disciplina';
   pinta(`<h1>${esc(t)}</h1><p>${opcion === 'plan_chico' ? `Tu plan actual sigue hasta el ${esc(fecha(o.fin))}; desde ahí pagas $${Number(o.planChico.precio).toLocaleString('es-MX')} por periodo. Recepción te escribe hoy para hacer el cambio.` : 'Recepción te escribe hoy con horarios y disciplinas que te queden.'}</p>
     <div class="error" id="err"></div><button class="btn pri" id="ok">Sí, quiero esto</button><button class="btn sec" id="volver">Volver</button>`, () => {
-    on('volver', opciones);
+    on('volver', atras);
     on('ok', e => ocupado(e.currentTarget, async () => {
       const b = await api('bajaQuedarse', { pase: S.pase, orderId: o.id, opcion });
       if (!b.ok) return b.error === 'pase' ? inicio(ERRORES.pase) : void (document.getElementById('err').textContent = msj(b));
-      pinta(`<h1>¡Qué gusto que te quedes!</h1><p>Recepción te escribe hoy por WhatsApp.${b.folio ? ` Tu folio es <b>${esc(b.folio)}</b>.` : ''}</p>`);
+      pinta(`<h1>¡Qué gusto que te quedes!</h1><p>Recepción te escribe hoy por WhatsApp.${b.folio ? ` Tu folio es <b>${esc(b.folio)}</b>.` : ''}</p>`, null, true);
     }));
   });
 }
@@ -356,6 +375,7 @@ function chips(id, lista, multi = false) {
   return `<div class="chips" id="${id}" role="group">${lista.map(([k, t]) => `<button class="chip" data-k="${esc(k)}" aria-pressed="false">${esc(t)}</button>`).join('')}</div>`;
 }
 function encuesta() {
+  paso(encuesta);
   const E = S.encuesta;
   pinta(`<h1>${S.o ? 'Antes de cancelar, ayúdanos a mejorar' : 'Ayúdanos a mejorar'}</h1>
     <p class="priv">Tus respuestas solo las usa Hera para mejorar. Si el motivo es de salud, no te pedimos detalles. Aviso de privacidad en herazenter.com.</p>
@@ -390,6 +410,7 @@ function encuesta() {
 
 // ---------------------------------------------------------------- 5. confirmar y folio
 function confirmar() {
+  paso(confirmar);
   const o = S.o;
   pinta(`<h1>Confirmar cancelación</h1>
     <div class="caja"><h2>${esc(o.nombre)}</h2>
@@ -400,17 +421,17 @@ function confirmar() {
     ${['tiempo', 'mudanza'].includes(S.encuesta.motivo) ? avisoHc(true) : ''}
     <div class="error" id="err"></div>
     <div class="par"><button class="btn pri" id="ok">Confirmar cancelación</button><button class="btn sec" id="volver">Volver</button></div>`, () => {
-    on('volver', encuesta);
+    on('volver', atras);
     on('ok', e => ocupado(e.currentTarget, () => enviar(o.id)));
   });
 }
 async function enviar(orderId) {
   const b = await api('bajaConfirmar', { pase: S.pase, orderId, encuesta: S.encuesta, vioOpciones: S.vioOpciones });
   if (!b.ok) { if (b.error === 'pase') return inicio(ERRORES.pase); const e = document.getElementById('err'); if (e) e.textContent = msj(b); return; }
-  if (!orderId) return pinta('<h1>¡Gracias!</h1><p>Tus respuestas nos ayudan mucho. Aquí te esperamos.</p>');
+  if (!orderId) return pinta('<h1>¡Gracias!</h1><p>Tus respuestas nos ayudan mucho. Aquí te esperamos.</p>', null, true);
   pinta(`<h1>Recibimos tu cancelación</h1><div class="caja"><p style="text-align:center">Tu folio</p><div class="folio">${esc(b.folio)}</div></div>
-    <p>Recepción la procesa hoy y te confirma por WhatsApp. Conservas tus clases hasta el ${esc(fecha(b.fin || S.o.fin))}.</p>
-    <p>Gracias por el tiempo que entrenaste con nosotras.</p>`);
+    <p>${b.cancelada ? 'Tu plan ya quedó cancelado: no se te volverá a cobrar.' : 'Recepción la procesa hoy y te confirma por WhatsApp.'} Conservas tus clases hasta el ${esc(fecha(b.fin || S.o.fin))}.</p>
+    <p>Gracias por el tiempo que entrenaste con nosotras.</p>`, null, true);
 }
 
 inicio();
